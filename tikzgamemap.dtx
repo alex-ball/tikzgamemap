@@ -1,0 +1,716 @@
+% \iffalse meta-comment
+%<*internal|tgm1>
+\def\Version{2019/01/12 v0.1}
+%</internal|tgm1>
+%<*internal>
+\iffalse
+%</internal>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+---------------------------------------------------------------------------
+tikzgamemap --- Maps for interactive fiction with TikZ
+
+ Author: Alex Ball
+ E-mail: ab318@bath.ac.uk
+License: Released under the LaTeX Project Public License v1.3c or later
+    See: http://www.latex-project.org/lppl.txt
+---------------------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2019 by Alex Ball <ab318@bath.ac.uk>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Alex Ball.
+
+\endpostamble
+
+\usedir{tex/latex/\jobname}
+\generate{
+  \file{tgm1.sty}{\from{\jobname.dtx}{tgm1}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/\jobname}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+% \fi
+%
+% \iffalse
+%<*driver>
+\ProvidesFile{tikzgamemap.dtx}
+%</driver>
+%<tgm1>\NeedsTeXFormat{LaTeX2e}[1999/12/01]
+%<tgm1>\ProvidesPackage{tgm1}
+%<*tgm1>
+    [\Version\space Maps for interactive fiction with TikZ]
+%</tgm1>
+%<*driver>
+\documentclass[12pt]{article}
+% Page Layout
+\usepackage[a4paper,hmargin=30mm,vmargin=25mm,nohead]{geometry}
+% Typography
+% \usepackage[charter,expert]{mathdesign}
+% \makeatletter
+% \def\hrulefill{\leavevmode\leaders \hrule height \rulethickness \hfill\kern\z@}
+% \makeatother
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage[scaled=0.95,tabular]{sourceserifpro}
+  \usepackage[scaled=0.95,tabular]{sourcesanspro}
+  \usepackage[varl,varqu]{zi4}
+\else
+  \usepackage{fontspec}
+  \setmainfont
+    [Scale=MatchLowercase
+    ,Ligatures=TeX
+    ]%
+    {Source Serif Pro}
+  \setsansfont
+    [Scale=MatchLowercase
+    ,Ligatures=TeX
+    ,StylisticSet=4
+    ,BoldFont={Source Sans Pro Bold}
+    ,ItalicFont={Source Sans Pro Italic}
+    ,BoldItalicFont={Source Sans Pro Bold Italic}
+    ]%
+    {Source Sans Pro}
+  \setmonofont
+    [Scale=MatchLowercase
+    ,RawFeature={extend=0.83}
+    ,BoldFont={Source Code Pro Bold}
+    ,BoldItalicFont={Source Code Pro Bold}
+    ,AutoFakeSlant=0.2
+    ,ItalicFeatures={StylisticSet=2,StylisticSet=3}
+    ,BoldItalicFeatures={FakeSlant=0.2,StylisticSet=2,StylisticSet=3}
+    ]%
+    {Source Code Pro}
+\fi
+% Improving the look of the documentation
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\usepackage{multicol}
+\usepackage{enumitem}
+\setlist[itemize]{%
+  topsep={6pt plus 2pt minus 1pt},%
+  partopsep={0pt plus 0.05em},%
+  itemsep={0.2em plus 0.05em minus 0.05em},%
+  parsep={0pt plus 0.05em},%
+}
+\usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
+\usepackage{etoolbox}
+\usepackage{tcolorbox,doc}
+\makeatletter
+\renewenvironment{theglossary}{%
+  \bgroup
+    \glossary@prologue
+    \GlossaryParms \let\item\@idxitem \ignorespaces
+}{%
+  \egroup
+}
+\makeatother
+\tcbuselibrary{documentation,breakable,minted}
+\colorlet{Option}{violet}
+\colorlet{Command}{red!75!black}
+\colorlet{Environment}{blue!75!black}
+\colorlet{Value}{olive!75!black}
+\colorlet{Color}{cyan!75!black}
+\tcbset
+  { listing engine=minted
+  , minted options=
+    { breaklines
+    , fontsize=\footnotesize
+    , linenos
+    , numbersep=20pt
+    , firstnumber=last
+    }
+  , index format=pgf
+  , color command=Command
+  , color environment=Environment
+  , color key=Option
+  , color value=Value
+  , color color=Color
+  , colbacktitle=ExampleFrame!33!ExampleBack
+  }
+\renewcommand{\theFancyVerbLine}{\footnotesize\itshape\color{gray}\arabic{FancyVerbLine}}
+\let\tcbcs=\cs
+\renewcommand*{\cs}[1]{\textcolor{Command}{\tcbcs{#1}}}
+\def\sqbrackets#1{%
+  \texttt{\textcolor{Option}{[}#1\textcolor{Option}{]}}}
+\def\brackets#1{%
+  \texttt{\textcolor{Environment}{\char`\{}#1\textcolor{Environment}{\char`\}}}}
+\def\marg#1{%
+  \textcolor{Environment}{\ttfamily\char`\{}\meta{#1}\textcolor{Environment}{\ttfamily\char`\}}}
+\newcommand*{\env}[1]{\textcolor{Environment}{\ttfamily #1}}
+\newcommand*{\key}[1]{\textcolor{Option}{\ttfamily #1}}
+\newcommand*{\val}[1]{\textcolor{Value}{\ttfamily #1}}
+\makeatletter
+\renewenvironment{macro}[1]{%
+  \def\MyName{#1}%
+  \edef\saved@macroname{\textbackslash #1}%
+  \let\saved@indexname\saved@macroname
+  \index{\MyName @\tcbIndexPrintComC {\MyName}|(emph}%
+}{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed a macro environment you have not opened on \the\inputlineno.}%
+  }
+  \index{\MyName @\tcbIndexPrintComC {\MyName}|)}%
+}
+\renewenvironment{environment}[1]{%
+  \def\MyName{#1}%
+  \edef\saved@macroname{#1}%
+  \let\saved@indexname\saved@macroname
+  \index{\MyName @\tcbIndexPrintEnvCA {\MyName}|(emph}%
+  \index{Environments!\MyName @\tcbIndexPrintEnvC {\MyName}|(emph}%
+}{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an environment environment you have not opened on \the\inputlineno.}%
+  }
+  \index{Environments!\MyName @\tcbIndexPrintEnvC {\MyName}|)}%
+  \index{\MyName @\tcbIndexPrintEnvCA {\MyName}|)}%
+}
+\makeatother
+\newenvironment{optionkey}[1]{%
+  \def\MyName{#1}%
+  \index{\MyName@\tcbIndexPrintKeyCA {\MyName}|(emph}%
+  \index{Keys!\MyName@\tcbIndexPrintKeyC {\MyName}|(emph}%
+}{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an optionkey environment you have not opened on \the\inputlineno.}%
+  }
+  \index{Keys!\MyName@\tcbIndexPrintKeyC {\MyName}|)}%
+  \index{\MyName@\tcbIndexPrintKeyCA {\MyName}|)}%
+}
+\newenvironment{optionvalue}[1]{%
+  \def\MyName{#1}%
+  \index{\MyName@\tcbIndexPrintValCA {\MyName}|(emph}%
+  \index{Values!\MyName@\tcbIndexPrintValC {\MyName}|(emph}%
+}{%
+  \ifdef{\MyName}{}{%
+    \errmessage{You have closed an optionvalue environment you have not opened on \the\inputlineno.}%
+  }
+  \index{Values!\MyName@\tcbIndexPrintValC {\MyName}|)}%
+  \index{\MyName@\tcbIndexPrintValCA {\MyName}|)}%
+}
+\makeatletter
+\newcommand{\resetmintedformat}{%
+  % Comments
+  \expandafter\def\csname PYGdefault@tok@c\endcsname{\let\PYGdefault@it=\textit\def\PYGdefault@tc####1{\textcolor{gray}{####1}}}
+  % Command sequences
+  \expandafter\def\csname PYGdefault@tok@k\endcsname{\def\PYGdefault@tc####1{\textcolor{Command}{####1}}}
+  % Optional arguments
+  \expandafter\def\csname PYGdefault@tok@na\endcsname{\def\PYGdefault@tc####1{\textcolor{Option}{####1}}}
+  % Braces
+  \expandafter\def\csname PYGdefault@tok@nb\endcsname{\def\PYGdefault@tc####1{\textcolor{Environment}{####1}}}
+}
+\apptocmd{\minted@checkstyle}{\resetmintedformat}{}{}
+\makeatother
+\newcommand{\pkg}[1]{\href{http://www.ctan.org/pkg/#1}{\textsf{#1}}}
+\MakeShortVerb{\|}
+\makeatletter
+\let\PrintMacroName\@gobble
+\let\PrintEnvName\@gobble
+\renewenvironment{tcb@manual@entry}{\begin{list}{}{%
+  \setlength{\topsep}{0pt}
+  \setlength{\partopsep}{0pt}
+  \setlength{\leftmargin}{\kvtcb@doc@left}%
+  \setlength{\itemindent}{0pt}%
+  \setlength{\itemsep}{0pt}%
+  \setlength{\parsep}{0pt}%
+  \setlength{\rightmargin}{\kvtcb@doc@right}%
+  }\item}{\end{list}}
+\makeatother
+% This bit inspired by ydoc
+\makeatletter
+\newwrite\ydocwrite
+\def\ydocfname{\jobname.tcbtemp}
+\def\ydoc@catcodes{%
+  \let\do\@makeother
+  \dospecials
+  \catcode`\\=\active
+  \catcode`\^^M=\active
+  \catcode`\ =\active
+}
+\def\macrocode{%
+  \begingroup
+  \ydoc@catcodes
+  \macro@code
+}
+\def\endmacrocode{}
+\begingroup
+\endlinechar\m@ne
+\@firstofone{%
+\catcode`\|=0\relax
+\catcode`\(=1\relax
+\catcode`\)=2\relax
+\catcode`\*=14\relax
+\catcode`\{=12\relax
+\catcode`\}=12\relax
+\catcode`\ =12\relax
+\catcode`\%=12\relax
+\catcode`\\=\active
+\catcode`\^^M=\active
+\catcode`\ =\active
+}*
+|gdef|macro@code#1^^M%    \end{macrocode}(*
+|endgroup|expandafter|macro@@code|expandafter(|ydoc@removeline#1|noexpand|lastlinemacro)*
+)*
+|gdef|ydoc@removeline#1^^M(|noexpand|firstlinemacro)*
+|gdef|ydoc@defspecialmacros(*
+|def^^M(|noexpand|newlinemacro)*
+|def (|noexpand|spacemacro)*
+|def\(|noexpand|bslashmacro)*
+)*
+|gdef|ydoc@defrevspecialmacros(*
+|def|newlinemacro(|noexpand^^M)*
+|def|spacemacro(|noexpand )*
+|def|bslashmacro(|noexpand\)*
+)*
+|endgroup
+\def\macro@@code#1{%
+  {\ydoc@defspecialmacros
+  \xdef\themacrocode{#1}}%
+  \PrintMacroCode
+  \end{macrocode}%
+}
+\def\PrintMacroCode{%
+  \begingroup
+  \let\firstlinemacro\empty
+  \let\lastlinemacro\empty
+  \def\newlinemacro{^^J}%
+  \let\bslashmacro\bslash
+  \let\spacemacro\space
+  \immediate\openout\ydocwrite=\ydocfname\relax
+  \immediate\write\ydocwrite{\themacrocode}%
+  \immediate\closeout\ydocwrite
+  \let\input\@input
+  \tcbinputlisting{breakable,listing only,docexample,listing file=\ydocfname}%
+  \endgroup
+}
+\makeatother
+
+\usepackage{tgm1}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\begin{document}
+
+\GetFileInfo{\jobname.dtx}
+\DoNotIndex{\newcommand,\newenvironment}
+
+\title{\textsf{tikzgamemap} --- Maps for interactive fiction with TikZ\thanks{This file
+  describes version \fileversion, last revised \filedate.}
+}
+\author{Alex Ball\thanks{E-mail: ab318@bath.ac.uk}}
+\date{Released \filedate}
+
+\maketitle
+
+\changes{v1.00}{2019/01/12}{First public release}
+
+\begin{abstract}
+While interactive fiction can come in many different varieties, there is a class
+of works that follows the tradition established by \emph{[Colossal Cave]
+Adventure} and Infocom games such as \emph{Zork}. Players typically move between
+areas or rooms using the eight cardinal and primary intercardinal points of the
+compass, as well as up, down, in and out. This package provides some shortcut
+methods for mapping out such game spaces using the graph-drawing facilities of
+TikZ.
+\end{abstract}
+
+\section{Usage}
+
+TODO
+
+\StopEventually{%
+ \PrintChanges
+ \PrintIndex
+}
+
+\section{Implementation}
+
+\setcounter{FancyVerbLine}{20}%
+\DocInput{\jobname.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%<*tgm1>
+% \fi %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    \begin{macrocode}
+\RequirePackage{tikz}
+\usetikzlibrary{graphs, quotes, shapes.misc, backgrounds}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\tgmE{0}
+\def\tgmN{90}
+\def\tgmW{180}
+\def\tgmS{270}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\tikzset
+{ set compass points/.code n args = {2}{%
+    \pgfmathsetmacro{\tgmNE}{atan2(#2, #1)}%
+    \pgfmathsetmacro{\tgmNW}{atan2(#2, -#1)}%
+    \pgfmathsetmacro{\tgmSW}{add(atan2(-#2, -#1), 360)}%
+    \pgfmathsetmacro{\tgmSE}{add(atan2(-#2, #1), 360)}%
+    \pgfmathsetmacro{\tgmENE}{divide(add(\tgmE,  \tgmNE), 2)}%
+    \pgfmathsetmacro{\tgmNNE}{divide(add(\tgmNE, \tgmN ), 2)}%
+    \pgfmathsetmacro{\tgmNNW}{divide(add(\tgmN,  \tgmNW), 2)}%
+    \pgfmathsetmacro{\tgmWNW}{divide(add(\tgmNW, \tgmW ), 2)}%
+    \pgfmathsetmacro{\tgmWSW}{divide(add(\tgmW,  \tgmSW), 2)}%
+    \pgfmathsetmacro{\tgmSSW}{divide(add(\tgmSW, \tgmS ), 2)}%
+    \pgfmathsetmacro{\tgmSSE}{divide(add(\tgmS,  \tgmSE), 2)}%
+    \pgfmathsetmacro{\tgmESE}{divide(add(\tgmSE, 360   ), 2)}%
+    % \pgfmathsetmacro{\tgmENE}{atan2(divide(#2,2), #1)}%
+    % \pgfmathsetmacro{\tgmNNE}{atan2(#2, divide(#1,2))}%
+    % \pgfmathsetmacro{\tgmNNW}{atan2(#2, divide(-#1,2))}%
+    % \pgfmathsetmacro{\tgmWNW}{atan2(divide(#2,2), -#1)}%
+    % \pgfmathsetmacro{\tgmWSW}{atan2(divide(-#2,2), -#1)}%
+    % \pgfmathsetmacro{\tgmSSW}{atan2(-#2, divide(-#1,2))}%
+    % \pgfmathsetmacro{\tgmSSE}{atan2(-#2, divide(#1,2))}%
+    % \pgfmathsetmacro{\tgmESE}{atan2(divide(-#2,2), #1)}%
+}
+, set compass points = {8}{4}
+}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\tikzset
+{ labelnode/.style =
+  { font = \tiny
+  , minimum size = 1em
+  , circle
+  , fill = white
+  , draw = black!20
+  , thin
+  , inner sep = 0pt
+  }
+%    \end{macrocode}
+%
+% For nodes
+%
+%    \begin{macrocode}
+, entry/.style =
+  { double
+  }
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+, exit/.is choice
+, exit/e/.style    = {label={[labelnode]\tgmE:E}}
+, exit/ne/.style   = {label={[labelnode]\tgmNE:\textsc{ne}}}
+, exit/n/.style    = {label={[labelnode]\tgmN:N}}
+, exit/nw/.style   = {label={[labelnode]\tgmNW:\textsc{nw}}}
+, exit/w/.style    = {label={[labelnode]\tgmW:W}}
+, exit/sw/.style   = {label={[labelnode]\tgmSW:\textsc{sw}}}
+, exit/s/.style    = {label={[labelnode]\tgmS:S}}
+, exit/se/.style   = {label={[labelnode]\tgmSE:\textsc{se}}}
+, exit/u/.style    = {label={[labelnode]#1:U}}
+, exit/u/.default  = {\tgmNNE}
+, exit/d/.style    = {label={[labelnode]#1:D}}
+, exit/d/.default  = {\tgmSSW}
+, exit/in/.style   = {label={[labelnode]#1:in}}
+, exit/in/.default = {\tgmESE}
+, exit/o/.style    = {label={[labelnode]#1:O}}
+, exit/o/.default  = {\tgmWNW}
+, exits/.style     = { exit/.list={#1} }
+%    \end{macrocode}
+%
+% labels for edges
+%
+%    \begin{macrocode}
+, labelin/.is choice
+, labelout/.is choice
+, labelin/e/.style   = { edge node={node [labelnode, pos=1] {E}} }
+, labelout/e/.style  = { edge node={node [labelnode, pos=0] {E}} }
+, labelin/ne/.style  = { edge node={node [labelnode, pos=1] {\textsc{ne}}} }
+, labelout/ne/.style = { edge node={node [labelnode, pos=0] {\textsc{ne}}} }
+, labelin/n/.style   = { edge node={node [labelnode, pos=1] {N}} }
+, labelout/n/.style  = { edge node={node [labelnode, pos=0] {N}} }
+, labelin/nw/.style  = { edge node={node [labelnode, pos=1] {\textsc{nw}}} }
+, labelout/nw/.style = { edge node={node [labelnode, pos=0] {\textsc{nw}}} }
+, labelin/w/.style   = { edge node={node [labelnode, pos=1] {W}} }
+, labelout/w/.style  = { edge node={node [labelnode, pos=0] {W}} }
+, labelin/sw/.style  = { edge node={node [labelnode, pos=1] {\textsc{sw}}} }
+, labelout/sw/.style = { edge node={node [labelnode, pos=0] {\textsc{sw}}} }
+, labelin/s/.style   = { edge node={node [labelnode, pos=1] {S}} }
+, labelout/s/.style  = { edge node={node [labelnode, pos=0] {S}} }
+, labelin/se/.style  = { edge node={node [labelnode, pos=1] {\textsc{se}}} }
+, labelout/se/.style = { edge node={node [labelnode, pos=0] {\textsc{se}}} }
+, labelin/u/.style   = { edge node={node [labelnode, pos=1] {U}} }
+, labelout/u/.style  = { edge node={node [labelnode, pos=0] {U}} }
+, labelin/d/.style   = { edge node={node [labelnode, pos=1] {D}} }
+, labelout/d/.style  = { edge node={node [labelnode, pos=0] {D}} }
+, labelin/in/.style  = { edge node={node [labelnode, pos=1] {in}} }
+, labelout/in/.style = { edge node={node [labelnode, pos=0] {in}} }
+, labelin/o/.style   = { edge node={node [labelnode, pos=1] {O}} }
+, labelout/o/.style  = { edge node={node [labelnode, pos=0] {O}} }
+, labelin/null/.style = {}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+, tgmedge/.style =
+  { draw = white
+  , double = black
+  }
+%    \end{macrocode}
+%
+% for 'to' edges
+%
+%    \begin{macrocode}
+, startedge/.is choice
+, startedge/e/.style =
+  { out = \tgmE
+  , labelout = e
+  }
+, startedge/ne/.style =
+  { out = \tgmNE
+  , labelout = ne
+  }
+, startedge/n/.style =
+  { out = \tgmN
+  , labelout = n
+  }
+, startedge/nw/.style =
+  { out = \tgmNW
+  , labelout = nw
+  }
+, startedge/w/.style =
+  { out = \tgmW
+  , labelout = w
+  }
+, startedge/sw/.style =
+  { out = \tgmSW
+  , labelout = sw
+  }
+, startedge/s/.style =
+  { out = \tgmS
+  , labelout = s
+  }
+, startedge/se/.style =
+  { out = \tgmSE
+  , labelout = se
+  }
+, startedge/u/.style =
+  { out = #1
+  , labelout = u
+  }
+, startedge/u/.default  = {\tgmNNE}
+, startedge/d/.style =
+  { out = #1
+  , labelout = d
+  }
+, startedge/d/.default = {\tgmSSW}
+, startedge/in/.style =
+  { out = #1
+  , labelout = in
+  }
+, startedge/in/.default  = {\tgmESE}
+, startedge/o/.style =
+  { out = #1
+  , labelout = o
+  }
+, startedge/o/.default  = {\tgmWNW}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+, endedge/.is choice
+, endedge/.default = null
+, endedge/null/.style = {}
+, endedge/e/.style =
+  { in = \tgmE
+  , labelin = e
+  }
+, endedge/ne/.style =
+  { in = \tgmNE
+  , labelin = ne
+  }
+, endedge/n/.style =
+  { in = \tgmN
+  , labelin = n
+  }
+, endedge/nw/.style =
+  { in = \tgmNW
+  , labelin = nw
+  }
+, endedge/w/.style =
+  { in = \tgmW
+  , labelin = w
+  }
+, endedge/sw/.style =
+  { in = \tgmSW
+  , labelin = sw
+  }
+, endedge/s/.style =
+  { in = \tgmS
+  , labelin = s
+  }
+, endedge/se/.style =
+  { in = \tgmSE
+  , labelin = se
+  }
+, endedge/u/.style =
+  { in = #1
+  , labelin = u
+  }
+, endedge/u/.default  = {\tgmNNE}
+, endedge/d/.style =
+  { in = #1
+  , labelin = d
+  }
+, endedge/d/.default = {\tgmSSW}
+, endedge/in/.style =
+  { in = #1
+  , labelin = in
+  }
+, endedge/in/.default  = {\tgmESE}
+, endedge/o/.style =
+  { in = #1
+  , labelin = o
+  }
+, endedge/o/.default  = {\tgmWNW}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+, go/.style n args = {2}{tgmedge, startedge = {#1}, endedge = {#2}}
+, maze/.style n args = {2}{tgmedge, labelout = {#1}, labelin = {#2}}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+, going/.code = {%
+    \pgfkeys{tikz, tgmedge, startedge/#1}%
+    \ifstrequal{#1}{e}{%
+      \pgfkeys{tikz,endedge = w}%
+    }{%
+    \ifstrequal{#1}{ne}{%
+      \pgfkeys{tikz,endedge = sw}%
+    }{%
+    \ifstrequal{#1}{n}{%
+      \pgfkeys{tikz,endedge = s}%
+    }{%
+    \ifstrequal{#1}{nw}{%
+      \pgfkeys{tikz,endedge = se}%
+    }{%
+    \ifstrequal{#1}{w}{%
+      \pgfkeys{tikz,endedge = e}%
+    }{%
+    \ifstrequal{#1}{sw}{%
+      \pgfkeys{tikz,endedge = ne}%
+    }{%
+    \ifstrequal{#1}{s}{%
+      \pgfkeys{tikz,endedge = n}%
+    }{%
+    \ifstrequal{#1}{se}{%
+      \pgfkeys{tikz,endedge = nw}%
+    }{%
+    \ifstrequal{#1}{u}{%
+      \pgfkeys{tikz,endedge = d}%
+    }{%
+    \ifstrequal{#1}{d}{%
+      \pgfkeys{tikz,endedge = u}%
+    }{%
+    \ifstrequal{#1}{in}{%
+      \pgfkeys{tikz,endedge = o}%
+    }{%
+    \ifstrequal{#1}{o}{%
+      \pgfkeys{tikz,endedge = in}%
+    }{}}}}}}}}}}}}%
+  }
+}
+%    \end{macrocode}
+%
+% \begin{environment}{gamemap}
+%    \begin{macrocode}
+\newenvironment{gamemap}[1][]{%
+\begin{tikzpicture}
+[ every matrix/.style =
+  { nodes =
+    { text depth = 0.2em
+    , align = center
+    , draw = black!20
+    , thick
+    , fill = white
+    , rounded rectangle
+    , inner sep = 1.25ex
+    }
+  , column sep = 1em
+  , row sep = 1em
+  , label distance = -0.5em - 0.2pt
+  }
+, graphs/every graph/.style =
+  { nodes =
+    { text depth = 0.2em
+    , align = center
+    , draw = black!20
+    , thick
+    , fill = white
+    , rounded rectangle
+    , inner sep = 1.25ex
+    }
+  , /tikz/label distance = -0.5em - 0.2pt
+  }
+, every edge quotes/.append style = {font = \scriptsize}
+, #1
+]
+\linespread{0.9}
+}{%
+\end{tikzpicture}%
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{macro}{routes}
+%    \begin{macrocode}
+\newcommand{\routes}[1]{%
+\begin{scope}
+[ semithick
+, on background layer
+]
+#1
+\end{scope}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%</tgm1>
+% \fi %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\Finale
