@@ -29,7 +29,7 @@ inst: all
 	mkdir -p $(UTREE)/{tex,source,doc}/latex/$(NAME)
 	cp $(NAME).{dtx,ins} $(UTREE)/source/latex/$(NAME)
 	cp tgm1.sty $(UTREE)/tex/latex/$(NAME)
-	cp $(NAME).pdf $(UTREE)/doc/latex/$(NAME)
+	cp $(NAME).pdf README.md $(UTREE)/doc/latex/$(NAME)
 	mktexlsr
 uninst:
 	rm -r $(UTREE)/{tex,source,doc}/latex/$(NAME)
@@ -39,7 +39,7 @@ install: all
 	sudo mkdir -p $(LOCAL)/{tex,source,doc}/latex/$(NAME)
 	sudo cp $(NAME).{dtx,ins} $(LOCAL)/source/latex/$(NAME)
 	sudo cp tgm1.sty $(LOCAL)/tex/latex/$(NAME)
-	sudo cp $(NAME).pdf $(LOCAL)/doc/latex/$(NAME)
+	sudo cp $(NAME).pdf README.md $(LOCAL)/doc/latex/$(NAME)
 	mktexlsr
 uninstall:
 	sudo rm -r $(LOCAL)/{tex,source,doc}/latex/$(NAME)

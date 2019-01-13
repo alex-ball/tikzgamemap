@@ -79,4 +79,4 @@ http://www.latex-project.org/lppl.txt
 This work is "maintained" (as per LPPL maintenance status) by
 Alex Ball.
 
-This work consists of the files tikzgamemap.dtx, README and a Makefile.
+This work consists of the files tikzgamemap.dtx, README.md and a Makefile.
