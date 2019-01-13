@@ -1,8 +1,8 @@
 # tikzgamemap: Maps for interactive fiction with TikZ
 
 While interactive fiction can come in many different varieties, there is a class
-of works that follows the tradition established by \emph{[Colossal Cave]
-Adventure} and Infocom games such as \emph{Zork}. Players typically move between
+of works that follows the tradition established by *[Colossal Cave]
+Adventure* and Infocom games such as *Zork*. Players typically move between
 areas or rooms using the eight cardinal and primary intercardinal points of the
 compass, as well as up, down, in and out. This package provides some shortcut
 methods for mapping out such game spaces using the graph-drawing facilities of
@@ -29,7 +29,7 @@ Running "make install" installs the files in the local TeX tree.
 
 A makefile is provided which you can use with the Make utility:
 
-  * Running `make tgm1.sty` just generates the package file.
+  * Running `make source` just generates the package file.
   * Running `make` generates the class file and documentation.
   * Running `make inst` generates and installs the files to your home TeX tree.
     (To undo, run `make uninst`.)
