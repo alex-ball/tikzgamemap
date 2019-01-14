@@ -348,6 +348,50 @@ methods for mapping out such game spaces using the graph-drawing facilities of
 TikZ.
 \end{abstract}
 
+\section{Introduction}
+
+If you have ever played a text adventure game in the Infocom style, you will
+probably recognise the following as being a fairly typical passage.
+
+\begin{tcolorbox}
+\textbf{Woodland Clearing}
+
+\medskip
+Though the tall oaks of the wood tower above you on all sides, here the leaf
+mulch gives way to scrubby grass and wild flowers, and for once you get a clear
+view of the bright blue sky. Footpaths lead away through the trees to the north,
+southwest and southeast.
+
+\medskip
+There is a brass lamp here.
+\end{tcolorbox}
+
+In the language of Inform, one of the systems for writing such games, the
+Woodland Clearing in this example is a \emph{room}. The player can travel to other
+rooms by moving in one of twelve possible directions: north, northeast, east,
+southeast, south, southwest, west, northwest, up, down, in and out. As a player,
+in order to keep track of these rooms and how they connect, it is often a good
+idea to record your progress in a simple map. Figure~\ref{fig:clearing} shows
+how you might record this passage.
+
+\begin{figure}
+\centering
+\begin{gamemap}
+\graph{
+  "Woodland\\Clearing" [exits={n,sw,se}]
+};
+\end{gamemap}
+\par
+\caption{A representation of a room with three exits}
+\label{fig:clearing}
+\end{figure}
+
+The aim of this package is to make it as easy and as natural as possible to
+build up a map of the game world as you play, using TikZ as a graphical backend.
+I do not claim to have achieved this on the first attempt, which is why I have
+left myself some wiggle room in the naming of the package file. (You will see
+what I mean in a moment.)
+
 \section{Usage}
 
 TODO
