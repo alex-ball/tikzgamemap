@@ -353,7 +353,7 @@ TikZ.
 If you have ever played a text adventure game in the Infocom style, you will
 probably recognise the following as being a fairly typical passage.
 
-\begin{tcolorbox}
+\begin{tcolorbox}[docexample]
 \textbf{Woodland Clearing}
 
 \medskip
@@ -394,12 +394,14 @@ what I mean in a moment.)
 
 \section{Usage}
 
+\subsection{Loading}
+
 Eventually, this package may support multiple input styles, but at the moment
 it only supports one, \texttt{tgm1}, which you load in the usual way.
 
-\begin{tcblisting}{listing only}
+\begin{dispListing}
 \usepackage{tgm1}
-\end{tcblisting}
+\end{dispListing}
 
 \subsection{Setting up}
 
@@ -423,13 +425,13 @@ placement}’ as the option.
 To draw a room, simply type the name within double quotes. If you want line
 breaks, add them manually.
 
-\begin{tcblisting}{listing side text}
+\begin{dispExample*}{sidebyside}
 \begin{gamemap}
 \graph{
   "Woodland\\Clearing"
 };
 \end{gamemap}
-\end{tcblisting}
+\end{dispExample*}
 
 You can change the appearance of the room with the following options:
 
@@ -438,6 +440,29 @@ Marks the room as being the starting point on the map. Visually, it gives the
 room a double border.
 \end{docKey}
 
+\begin{docKey}{exits}{=\marg{list of directions}}{no default, initially empty}
+Marks unexplored exits from the room. If more than one exit is to be marked,
+they should be comma-separated and the whole list wrapped in braces. Possible
+exit values include \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
+\docValue{s}, \docValue{sw}, \docValue{w}, and \docValue{nw}. The values
+\docValue{u}, \docValue{d}, \docValue{in}, \docValue{o} are special: by default
+they get positioned NNE, SSW, ESE and WNW respectively, but you can specify the
+exact angle as an additional argument as in \docValue*{u=60}; if you do, remember
+the whole \key{exits} argument must be wrapped in braces.
+\end{docKey}
+
+\begin{dispExample*}{sidebyside}
+\begin{gamemap}
+\graph{
+  "Woodland\\Clearing"
+    [entry,exits={n,sw,se,u=150}]
+};
+\end{gamemap}
+\end{dispExample*}
+
+\subsection{Connecting rooms}
+
+TODO
 
 \StopEventually{%
  \PrintChanges

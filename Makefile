@@ -20,7 +20,7 @@ $(NAME).pdf: $(NAME).dtx
 	latexmk -pdflua -quiet -shell-escape $(NAME).dtx > /dev/null
 
 clean:
-	rm -f $(NAME).{aux,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,log,out,tcbtemp}
+	rm -f $(NAME).{aux,fdb_latexmk,fls,glo,gls,hd,idx,ilg,ind,ins,listing,log,out,tcbtemp}
 	rm -rf _minted-$(NAME)
 distclean: clean
 	rm -f $(NAME).pdf tgm1.sty

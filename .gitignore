@@ -123,6 +123,7 @@ sympy-plots-for-*.tex/
 
 # tcolorbox
 *.tcbtemp
+*.listing
 
 # xindy
 *.xdy
