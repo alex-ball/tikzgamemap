@@ -394,7 +394,50 @@ what I mean in a moment.)
 
 \section{Usage}
 
-TODO
+Eventually, this package may support multiple input styles, but at the moment
+it only supports one, \texttt{tgm1}, which you load in the usual way.
+
+\begin{tcblisting}{listing only}
+\usepackage{tgm1}
+\end{tcblisting}
+
+\subsection{Setting up}
+
+\begin{docEnvironment}{gamemap}{\oarg{options}}
+This is the outer environment that needs to surround the map. It is a wrapper
+around the \texttt{tikzpicture} environment, so you can pass TikZ options to
+it, use TikZ commands within it and use it like \texttt{tikzpicture} with, say,
+the \pkg{standalone} class.
+\end{docEnvironment}
+
+\begin{docCommand}{graph}{\oarg{options}\marg{routes};}
+This activates the regular TikZ graph-drawing syntax parsing. Add routes through
+the game world within this command. Unfortunately, none of the regular graph
+drawing layouts is particularly suitable for automatically placing rooms, so
+until I can find or write one, your best bet is probably to pass ‘\docValue{no
+placement}’ as the option.
+\end{docCommand}
+
+\subsection{Drawing a room}
+
+To draw a room, simply type the name within double quotes. If you want line
+breaks, add them manually.
+
+\begin{tcblisting}{listing side text}
+\begin{gamemap}
+\graph{
+  "Woodland\\Clearing"
+};
+\end{gamemap}
+\end{tcblisting}
+
+You can change the appearance of the room with the following options:
+
+\begin{docKey}{entry}{}{no value}
+Marks the room as being the starting point on the map. Visually, it gives the
+room a double border.
+\end{docKey}
+
 
 \StopEventually{%
  \PrintChanges
