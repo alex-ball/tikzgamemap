@@ -407,8 +407,8 @@ it only supports one, \texttt{tgm1}, which you load in the usual way.
 
 \begin{docEnvironment}{gamemap}{\oarg{options}}
 This is the outer environment that needs to surround the map. It is a wrapper
-around the \texttt{tikzpicture} environment, so you can pass TikZ options to
-it, use TikZ commands within it and use it like \texttt{tikzpicture} with, say,
+around the \env{tikzpicture} environment, so you can pass TikZ options to
+it, use TikZ commands within it and use it like \env{tikzpicture} with, say,
 the \pkg{standalone} class.
 \end{docEnvironment}
 
@@ -425,7 +425,7 @@ placement}’ as the option.
 To draw a room, simply type the name within double quotes. If you want line
 breaks, add them manually.
 
-\begin{dispExample*}{sidebyside}
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}
 \graph{
   "Woodland\\Clearing"
@@ -451,7 +451,7 @@ exact angle as an additional argument as in \docValue*{u=60}; if you do, remembe
 the whole \key{exits} argument must be wrapped in braces.
 \end{docKey}
 
-\begin{dispExample*}{sidebyside}
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}
 \graph{
   "Woodland\\Clearing"
@@ -460,9 +460,65 @@ the whole \key{exits} argument must be wrapped in braces.
 \end{gamemap}
 \end{dispExample*}
 
+\subsection{Positioning rooms}
+
+As mentioned above, there is currently no assistance offered for positioning
+rooms. The recommended approach to use is as follows:
+
+\begin{itemize}
+\item
+  Use the \key{x} and \key{y} options of \env{gamemap} to set the size of the
+  grid to use.
+\item
+  Within the \cs{graph} command, use braces to group rooms together.
+  Just after the opening brace, you can add options in square brackets, so use
+  an \key{x} or \key{y} option to set a default value for all the rooms within
+  it to something other than the initial 0.
+\item
+  Pass \key{x} or \key{y} options as necessary to individual rooms.
+\item
+  Separate disconnected rooms with commas.
+\end{itemize}
+
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{gamemap}[x=8em, y=5em]
+\graph [no placement] {
+  { [y=1]
+  "Woodland\\Clearing" [x=1,exits={n,sw,se}],
+  "Fallen\\Tree" [x=2,exits=w]
+  }
+};
+\end{gamemap}
+\end{dispExample*}
+
 \subsection{Connecting rooms}
 
-TODO
+You can connect two rooms by separating them with \texttt{--} instead of a
+comma, thereby drawing the route between them. This package provides
+options you can pass to this route, to label which exit the player character
+needs to take to travel along it.
+
+The simplest case is where a route is symmetrical.
+
+\begin{docKey}{going}{=\meta{direction}}{no default, initially empty}
+The direction can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
+\docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
+\docValue{d}, \docValue{in}, or \docValue{o}. The beginning of the path will
+be labelled with the given exit, and the end will be labelled with its inverse.
+\end{docKey}
+
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{gamemap}[x=8em, y=5em]
+\graph [no placement] {
+  { [y=1]
+  "Fallen\\Tree" [x=2] -- [going=w]
+  "Woodland\\Clearing" [x=1] -- [going=u]
+  "Treetop" [x=1,y=2]
+  }
+};
+\end{gamemap}
+\end{dispExample*}
+
 
 \StopEventually{%
  \PrintChanges
