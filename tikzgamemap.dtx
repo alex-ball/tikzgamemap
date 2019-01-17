@@ -447,8 +447,8 @@ exit values include \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, and \docValue{nw}. The values
 \docValue{u}, \docValue{d}, \docValue{in}, \docValue{o} are special: by default
 they get positioned NNE, SSW, ESE and WNW respectively, but you can specify the
-exact angle as an additional argument as in \docValue*{u=60}; if you do, remember
-the whole \key{exits} argument must be wrapped in braces.
+exact angle as an additional argument as in \val{u=}\meta{angle}; if you do,
+remember the whole \key{exits} argument must be wrapped in braces.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
@@ -519,6 +519,32 @@ be labelled with the given exit, and the end will be labelled with its inverse.
 \end{gamemap}
 \end{dispExample*}
 
+For more complex cases, the following option can be used instead:
+
+\begin{docKey}{go}{=\marg{direction}\marg{direction}}{no default, initially empty}
+The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
+\docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
+\docValue{d}, \docValue{in}, or \docValue{o}. The beginning of the path will be
+labelled with the first given exit, and the end will be labelled with the
+second. You can explicitly place the non-compass exits at a certain angle around
+the room circumference by giving it as an additional argument, as in
+\val{u=}\meta{angle}.
+\end{docKey}
+
+This option is most useful if the route explicitly turns a corner, or if you
+need to explicitly position the up, down, in or out exits.
+
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{gamemap}[x=8em, y=5em]
+\graph [no placement] {
+  { [y=1]
+  "Fallen\\Tree" [x=1.5,y=0] -- [go={n}{se}]
+  "Woodland\\Clearing" [x=1,exits={sw}]
+  -- [go={u=0}{d=180}] "Treetop" [x=2]
+  },
+};
+\end{gamemap}
+\end{dispExample*}
 
 \StopEventually{%
  \PrintChanges
