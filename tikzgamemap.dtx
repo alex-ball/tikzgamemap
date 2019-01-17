@@ -440,6 +440,11 @@ Marks the room as being the starting point on the map. Visually, it gives the
 room a double border.
 \end{docKey}
 
+\begin{docKey}{tunnel}{}{no value}
+Marks the room as appearing on another map as well, so that you can split the
+game world across several maps. Visually, it gives the room a thick border.
+\end{docKey}
+
 \begin{docKey}{exits}{=\marg{list of directions}}{no default, initially empty}
 Marks unexplored exits from the room. If more than one exit is to be marked,
 they should be comma-separated and the whole list wrapped in braces. Possible
@@ -485,7 +490,7 @@ rooms. The recommended approach to use is as follows:
 \graph [no placement] {
   { [y=1]
   "Woodland\\Clearing" [x=1,exits={n,sw,se}],
-  "Fallen\\Tree" [x=2,exits=w]
+  "Fallen\\Tree" [tunnel,x=2,exits=w]
   }
 };
 \end{gamemap}
@@ -510,11 +515,9 @@ be labelled with the given exit, and the end will be labelled with its inverse.
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}[x=8em, y=5em]
 \graph [no placement] {
-  { [y=1]
-  "Fallen\\Tree" [x=2] -- [going=w]
-  "Woodland\\Clearing" [x=1] -- [going=u]
+  "Fallen\\Tree" [x=2,y=1] -- [going=w]
+  "Woodland\\Clearing" [x=1,y=1] -- [going=u]
   "Treetop" [x=1,y=2]
-  }
 };
 \end{gamemap}
 \end{dispExample*}
@@ -537,11 +540,9 @@ need to explicitly position the up, down, in or out exits.
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}[x=8em, y=5em]
 \graph [no placement] {
-  { [y=1]
   "Fallen\\Tree" [x=1.5,y=0] -- [go={n}{se}]
-  "Woodland\\Clearing" [x=1,exits={n,sw}]
-  -- [go={u=0}{d=180}] "Treetop" [x=2]
-  },
+  "Woodland\\Clearing" [x=1,y=1,exits={n,sw}]
+  -- [go={u=0}{d=180}] "Treetop" [x=2,y=1]
 };
 \end{gamemap}
 \end{dispExample*}
@@ -556,7 +557,7 @@ The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. This behaves much
 like \key{go} except that the line is drawn straight between the rooms, without
 any attempt to place the exits logically. Any angles given as arguments to a
-direction are thus ignored. Use \key{null} to avoid drawing an exit at all.
+direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 \end{docKey}
 
 This is also the option to use to draw one-way routes.
@@ -649,6 +650,9 @@ This is also the option to use to draw one-way routes.
 %    \begin{macrocode}
 , entry/.style =
   { double
+  }
+, tunnel/.style =
+  { ultra thick
   }
 %    \end{macrocode}
 %
