@@ -539,9 +539,41 @@ need to explicitly position the up, down, in or out exits.
 \graph [no placement] {
   { [y=1]
   "Fallen\\Tree" [x=1.5,y=0] -- [go={n}{se}]
-  "Woodland\\Clearing" [x=1,exits={sw}]
+  "Woodland\\Clearing" [x=1,exits={n,sw}]
   -- [go={u=0}{d=180}] "Treetop" [x=2]
   },
+};
+\end{gamemap}
+\end{dispExample*}
+
+Sometimes a game gives up all pretence of realism and includes a set of
+asymmetric routes deliberate designed to confuse you. For situations such as
+these, the following option can be used.
+
+\begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no default, initially empty}
+The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
+\docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
+\docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. This behaves much
+like \key{go} except that the line is drawn straight between the rooms, without
+any attempt to place the exits logically. Any angles given as arguments to a
+direction are thus ignored. Use \key{null} to avoid drawing an exit at all.
+\end{docKey}
+
+This is also the option to use to draw one-way routes.
+
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{gamemap}[x=8em, y=5em]
+\graph [no placement] {
+  "Alcove" [x=5,y=2,exits=n] -- [maze={w}{sw}]
+  "Bower" [x=6,y=1.5] -- [maze={e}{n}]
+  "Corner" [x=6,y=0.5] -- [maze={nw}{null}]
+  "Doorway" [x=5,y=1] -- [maze={sw}{null}]
+  "Ewery" [x=5,y=0,exits=s] -- [maze={se}{null}],
+  "Alcove" -- [maze={sw}{s}] "Corner",
+  "Alcove" -- [maze={ne}{nw}] "Doorway",
+  "Bower" -- [maze={ne}{s}] "Doorway",
+  "Bower" -- [maze={nw}{w}] "Ewery",
+  "Corner" -- [maze={se}{e}] "Ewery"
 };
 \end{gamemap}
 \end{dispExample*}
