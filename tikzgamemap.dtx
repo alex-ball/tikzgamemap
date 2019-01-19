@@ -713,12 +713,12 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
+% \subsection{Room options}
+%
 % \begin{optionkey}{entry}
 % The \key{entry} key is an alias for a double border.
 %
-% \subsection{Room options}
-%
-%    \begin{macrocode}
+  %    \begin{macrocode}
 , entry/.style =
   { double
   }
@@ -735,7 +735,11 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
-% \subsection{Exit labels}
+% \subsection{Exits}
+%
+% \begin{optionkey}{labelnode}
+% The \key{labelnode} option controls the appearance of the exits that are drawn
+% on the periphery of the rooms.
 %
 %    \begin{macrocode}
 , labelnode/.style =
@@ -748,8 +752,16 @@ This is also the option to use to draw one-way routes.
   , inner sep = 0pt
   }
 %    \end{macrocode}
+% \end{optionkey}
 %
-% For nodes
+% \subsubsection{Exits as labels on nodes}
+%
+% \begin{optionkey}{exit}
+% The \key{exit} option is used to draw an exit as a label around the room node.
+% Its value must be drawn from an authority list, and determines both the label
+% text and the angle at which it is drawn.
+%
+% For the compass directions, the angle is fixed.
 %
 %    \begin{macrocode}
 , exit/.is choice
@@ -761,6 +773,12 @@ This is also the option to use to draw one-way routes.
 , exit/sw/.style   = {label={[labelnode]\tgmSW:\textsc{sw}}}
 , exit/s/.style    = {label={[labelnode]\tgmS:S}}
 , exit/se/.style   = {label={[labelnode]\tgmSE:\textsc{se}}}
+%    \end{macrocode}
+%
+% For the non-compass directions, the angle has a default that can be overridden
+% by an argument value.
+%
+%    \begin{macrocode}
 , exit/u/.style    = {label={[labelnode]#1:U}}
 , exit/u/.default  = {\tgmNNE}
 , exit/d/.style    = {label={[labelnode]#1:D}}
@@ -769,8 +787,17 @@ This is also the option to use to draw one-way routes.
 , exit/in/.default = {\tgmESE}
 , exit/o/.style    = {label={[labelnode]#1:O}}
 , exit/o/.default  = {\tgmWNW}
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{exits}
+% We supply the \key{exits} key to allow more than one exit to be specified at
+% once.
+%
+%    \begin{macrocode}
 , exits/.style     = { exit/.list={#1} }
 %    \end{macrocode}
+% \end{optionkey}
 %
 % labels for edges
 %
