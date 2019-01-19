@@ -89,7 +89,7 @@ Alex Ball.
   \usepackage[scaled=0.95,tabular]{sourcesanspro}
   \usepackage[varl,varqu]{zi4}
 \else
-  \usepackage{fontspec}
+  \usepackage[no-math]{fontspec}
   \setmainfont
     [Scale=MatchLowercase
     ,Ligatures=TeX
@@ -115,6 +115,7 @@ Alex Ball.
     ]%
     {Source Code Pro}
 \fi
+\usepackage[italic]{mathastext}
 % Improving the look of the documentation
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
@@ -618,21 +619,74 @@ This is also the option to use to draw one-way routes.
 \usetikzlibrary{graphs, quotes, shapes.misc}
 %    \end{macrocode}
 %
+% \subsection{Setting the aspect ratio}
 %
+% To allow for configurability, we use macros instead of angles for compass
+% point directions. The cardinal compass points are at constant angles; we could
+% hard code them, but for consistency with the rest we don't.
+%
+% \begin{macro}{tgmE}
+% \begin{macro}{tgmN}
+% \begin{macro}{tgmW}
+% \begin{macro}{tgmS}
+% \begin{macro}{tgmEE}
 %    \begin{macrocode}
 \def\tgmE{0}
 \def\tgmN{90}
 \def\tgmW{180}
 \def\tgmS{270}
+\def\tgmEE{360}
 %    \end{macrocode}
+%
+% The usefulness of \cs{tgmEE} will become clear in a moment.
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% \begin{optionkey}{set compass points}
+% The remaining directions need to be set with reference to whatever aspect
+% ratio is used for the grid on which the rooms are laid out. The
+% \key{set compass points} key takes two arguments: the relative horizontal
+% and vertical size of the grid respectively.
 %
 %    \begin{macrocode}
 \tikzset
 { set compass points/.code n args = {2}{%
+%    \end{macrocode}
+%
+% The angles for the primary intercardinal points are calculated from
+% $\tan^{-1} (y/x)$.
+%
+% \begin{macro}{tgmNE}
+% \begin{macro}{tgmNW}
+% \begin{macro}{tgmSW}
+% \begin{macro}{tgmSE}
+%    \begin{macrocode}
     \pgfmathsetmacro{\tgmNE}{atan2(#2, #1)}%
     \pgfmathsetmacro{\tgmNW}{atan2(#2, -#1)}%
     \pgfmathsetmacro{\tgmSW}{add(atan2(-#2, -#1), 360)}%
     \pgfmathsetmacro{\tgmSE}{add(atan2(-#2, #1), 360)}%
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% We now calculate the angles for the points between the eight defined so far.
+% It turns out that taking the mean of the angles either side gives a more
+% aesthetically pleasing result than the strict geometric solution.
+%
+% \begin{macro}{tgmENE}
+% \begin{macro}{tgmNNE}
+% \begin{macro}{tgmNNW}
+% \begin{macro}{tgmWNW}
+% \begin{macro}{tgmWSW}
+% \begin{macro}{tgmSSW}
+% \begin{macro}{tgmSSE}
+% \begin{macro}{tgmESE}
+%    \begin{macrocode}
     \pgfmathsetmacro{\tgmENE}{divide(add(\tgmE,  \tgmNE), 2)}%
     \pgfmathsetmacro{\tgmNNE}{divide(add(\tgmNE, \tgmN ), 2)}%
     \pgfmathsetmacro{\tgmNNW}{divide(add(\tgmN,  \tgmNW), 2)}%
@@ -640,11 +694,24 @@ This is also the option to use to draw one-way routes.
     \pgfmathsetmacro{\tgmWSW}{divide(add(\tgmW,  \tgmSW), 2)}%
     \pgfmathsetmacro{\tgmSSW}{divide(add(\tgmSW, \tgmS ), 2)}%
     \pgfmathsetmacro{\tgmSSE}{divide(add(\tgmS,  \tgmSE), 2)}%
-    \pgfmathsetmacro{\tgmESE}{divide(add(\tgmSE, 360   ), 2)}%
-}
-, set compass points = {8}{4}
-}
+    \pgfmathsetmacro{\tgmESE}{divide(add(\tgmSE, \tgmEE), 2)}%
 %    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+% \end{macro}
+%
+% A 2:1 ratio seems a sensible default.
+%
+%    \begin{macrocode}
+  }
+, set compass points = {2}{1}
+%    \end{macrocode}
+% \end{optionkey}
 %
 %    \begin{macrocode}
 \tikzset
