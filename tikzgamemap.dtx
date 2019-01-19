@@ -846,7 +846,15 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
-% for 'to' edges
+% \subsection{Shaping ‘to’ edges}
+%
+% The following options trigger the use of the ‘to’ path instead of a ‘line-to’
+% path, and ensure the edge leaves and enters the nodes at the correct angles.
+%
+% \begin{optionkey}{startedge}
+% The \key{startedge} option takes one of an authority list of values, passes it
+% to \key{labelout} option, and passes an appropriate angle to the standard
+% \key{out} option.
 %
 %    \begin{macrocode}
 , startedge/.is choice
@@ -882,6 +890,11 @@ This is also the option to use to draw one-way routes.
   { out = \tgmSE
   , labelout = se
   }
+%    \end{macrocode}
+%
+% The angles of the remaining directions can be configured.
+%
+%    \begin{macrocode}
 , startedge/u/.style =
   { out = #1
   , labelout = u
@@ -903,11 +916,15 @@ This is also the option to use to draw one-way routes.
   }
 , startedge/o/.default  = {\tgmWNW}
 %    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{startedge}
+% The \key{endedge} option takes one of an authority list of values, passes it
+% to \key{labelin} option, and passes an appropriate angle to the standard
+% \key{in} option.
 %
 %    \begin{macrocode}
 , endedge/.is choice
-, endedge/.default = null
-, endedge/null/.style = {}
 , endedge/e/.style =
   { in = \tgmE
   , labelin = e
@@ -940,6 +957,11 @@ This is also the option to use to draw one-way routes.
   { in = \tgmSE
   , labelin = se
   }
+%    \end{macrocode}
+%
+% As before, the angles of the remaining directions can be configured.
+%
+%    \begin{macrocode}
 , endedge/u/.style =
   { in = #1
   , labelin = u
@@ -961,6 +983,29 @@ This is also the option to use to draw one-way routes.
   }
 , endedge/o/.default  = {\tgmWNW}
 %    \end{macrocode}
+%
+% The default value is \val{null}, which does nothing.
+%
+%    \begin{macrocode}
+, endedge/.default = null
+, endedge/null/.style = {}
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \subsection{Route options}
+%
+% \begin{optionkey}{tgmedge}
+% The \key{tgmedge} option styles the edges representing the routes. We make
+% them black with a white border, so if they cross it appears that the first
+% routes passes under the second.
+%
+%    \begin{macrocode}
+, tgmedge/.style =
+  { draw = white
+  , double = black
+  }
+%    \end{macrocode}
+% \end{optionkey}
 %
 %    \begin{macrocode}
 , go/.style n args = {2}{tgmedge, startedge = {#1}, endedge = {#2}}
