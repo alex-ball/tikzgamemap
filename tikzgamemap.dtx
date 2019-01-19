@@ -420,6 +420,17 @@ until I can find or write one, your best bet is probably to pass ‘\docValue{no
 placement}’ as the option.
 \end{docCommand}
 
+\begin{docCommand}{matrix}{\oarg{options}\marg{rooms};}
+This activates the regular TikZ matrix syntax parsing, which is very similar to
+regular array\slash table syntax. You can use this to lay out a grid of rooms.
+It is less flexible but may save you some typing.
+\end{docCommand}
+
+\begin{docCommand}{routes}{\marg{paths};}
+After laying out the rooms in a matrix, use this command to specify the routes
+between them.
+\end{docCommand}
+
 \subsection{Drawing a room}
 
 To draw a room, simply type the name within double quotes. If you want line
@@ -548,14 +559,14 @@ need to explicitly position the up, down, in or out exits.
 \end{dispExample*}
 
 Sometimes a game gives up all pretence of realism and includes a set of
-asymmetric routes deliberate designed to confuse you. For situations such as
+asymmetric routes deliberately designed to confuse you. For situations such as
 these, the following option can be used.
 
 \begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no default, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
 \docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. This behaves much
-like \key{go} except that the line is drawn straight between the rooms, without
+like \key{go} except that the route is drawn straight between the rooms, without
 any attempt to place the exits logically. Any angles given as arguments to a
 direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 \end{docKey}
