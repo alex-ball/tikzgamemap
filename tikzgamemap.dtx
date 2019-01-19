@@ -607,14 +607,17 @@ This is also the option to use to draw one-way routes.
 %<*tgm1>
 % \fi %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%    \begin{macrocode}
-\RequirePackage{tikz}
-\usetikzlibrary{graphs, quotes, shapes.misc, backgrounds}
-%    \end{macrocode}
+% \subsection{Dependencies}
+%
+% This package is based on TikZ. The |graph| library provides the graph syntax,
+% the |quotes| library allows you to use the quotes syntax to label nodes and
+% edges, and |shapes.misc| provides the rounded rectangle shape.
 %
 %    \begin{macrocode}
-\RequirePackage{etoolbox}
+\RequirePackage{tikz}
+\usetikzlibrary{graphs, quotes, shapes.misc}
 %    \end{macrocode}
+%
 %
 %    \begin{macrocode}
 \def\tgmE{0}
