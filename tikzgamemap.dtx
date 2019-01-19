@@ -799,44 +799,52 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
-% labels for edges
+% \subsubsection{Exits as nodes on edges}
+%
+% \begin{optionkey}{labelin}
+% The \key{labelin} option draws an exit as a node at the very end of an edge.
+% Its value must be drawn from an authority list, and determines both the label
+% text and the angle at which it is drawn. The \val{null} value does nothing.
 %
 %    \begin{macrocode}
 , labelin/.is choice
-, labelout/.is choice
 , labelin/e/.style   = { edge node={node [labelnode, pos=1] {E}} }
-, labelout/e/.style  = { edge node={node [labelnode, pos=0] {E}} }
 , labelin/ne/.style  = { edge node={node [labelnode, pos=1] {\textsc{ne}}} }
-, labelout/ne/.style = { edge node={node [labelnode, pos=0] {\textsc{ne}}} }
 , labelin/n/.style   = { edge node={node [labelnode, pos=1] {N}} }
-, labelout/n/.style  = { edge node={node [labelnode, pos=0] {N}} }
 , labelin/nw/.style  = { edge node={node [labelnode, pos=1] {\textsc{nw}}} }
-, labelout/nw/.style = { edge node={node [labelnode, pos=0] {\textsc{nw}}} }
 , labelin/w/.style   = { edge node={node [labelnode, pos=1] {W}} }
-, labelout/w/.style  = { edge node={node [labelnode, pos=0] {W}} }
 , labelin/sw/.style  = { edge node={node [labelnode, pos=1] {\textsc{sw}}} }
-, labelout/sw/.style = { edge node={node [labelnode, pos=0] {\textsc{sw}}} }
 , labelin/s/.style   = { edge node={node [labelnode, pos=1] {S}} }
-, labelout/s/.style  = { edge node={node [labelnode, pos=0] {S}} }
 , labelin/se/.style  = { edge node={node [labelnode, pos=1] {\textsc{se}}} }
-, labelout/se/.style = { edge node={node [labelnode, pos=0] {\textsc{se}}} }
 , labelin/u/.style   = { edge node={node [labelnode, pos=1] {U}} }
-, labelout/u/.style  = { edge node={node [labelnode, pos=0] {U}} }
 , labelin/d/.style   = { edge node={node [labelnode, pos=1] {D}} }
-, labelout/d/.style  = { edge node={node [labelnode, pos=0] {D}} }
 , labelin/in/.style  = { edge node={node [labelnode, pos=1] {in}} }
-, labelout/in/.style = { edge node={node [labelnode, pos=0] {in}} }
 , labelin/o/.style   = { edge node={node [labelnode, pos=1] {O}} }
-, labelout/o/.style  = { edge node={node [labelnode, pos=0] {O}} }
 , labelin/null/.style = {}
 %    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{labelout}
+% The \key{labelout} option does the same thing but at the very beginning of
+% the edge.
 %
 %    \begin{macrocode}
-, tgmedge/.style =
-  { draw = white
-  , double = black
-  }
+, labelout/.is choice
+, labelout/e/.style  = { edge node={node [labelnode, pos=0] {E}} }
+, labelout/ne/.style = { edge node={node [labelnode, pos=0] {\textsc{ne}}} }
+, labelout/n/.style  = { edge node={node [labelnode, pos=0] {N}} }
+, labelout/nw/.style = { edge node={node [labelnode, pos=0] {\textsc{nw}}} }
+, labelout/w/.style  = { edge node={node [labelnode, pos=0] {W}} }
+, labelout/sw/.style = { edge node={node [labelnode, pos=0] {\textsc{sw}}} }
+, labelout/s/.style  = { edge node={node [labelnode, pos=0] {S}} }
+, labelout/se/.style = { edge node={node [labelnode, pos=0] {\textsc{se}}} }
+, labelout/u/.style  = { edge node={node [labelnode, pos=0] {U}} }
+, labelout/d/.style  = { edge node={node [labelnode, pos=0] {D}} }
+, labelout/in/.style = { edge node={node [labelnode, pos=0] {in}} }
+, labelout/o/.style  = { edge node={node [labelnode, pos=0] {O}} }
+, labelout/null/.style = {}
 %    \end{macrocode}
+% \end{optionkey}
 %
 % for 'to' edges
 %
