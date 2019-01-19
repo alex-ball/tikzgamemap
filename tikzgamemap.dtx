@@ -713,9 +713,32 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
+% \begin{optionkey}{entry}
+% The \key{entry} key is an alias for a double border.
+%
+% \subsection{Room options}
+%
 %    \begin{macrocode}
-\tikzset
-{ labelnode/.style =
+, entry/.style =
+  { double
+  }
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{tunnel}
+% The \key{tunnel} key is an alias for a thick border.
+%
+%    \begin{macrocode}
+, tunnel/.style =
+  { ultra thick
+  }
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \subsection{Exit labels}
+%
+%    \begin{macrocode}
+, labelnode/.style =
   { font = \tiny
   , minimum size = 1em
   , circle
@@ -727,15 +750,6 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 %
 % For nodes
-%
-%    \begin{macrocode}
-, entry/.style =
-  { double
-  }
-, tunnel/.style =
-  { ultra thick
-  }
-%    \end{macrocode}
 %
 %    \begin{macrocode}
 , exit/.is choice
