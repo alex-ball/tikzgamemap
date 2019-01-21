@@ -616,7 +616,7 @@ This is also the option to use to draw one-way routes.
 %
 %    \begin{macrocode}
 \RequirePackage{tikz}
-\usetikzlibrary{graphs, quotes, shapes.misc}
+\usetikzlibrary{graphs, quotes, shapes.misc, backgrounds}
 %    \end{macrocode}
 %
 % \subsection{Setting the aspect ratio}
@@ -714,6 +714,22 @@ This is also the option to use to draw one-way routes.
 % \end{optionkey}
 %
 % \subsection{Room options}
+%
+% \begin{optionkey}{tgmnode}
+% The \key{tgmnode} key is the base style used for rooms.
+%
+%    \begin{macrocode}
+, tgmnode/.style =
+  { text depth = 0.2em
+  , align = center
+  , draw = black!20
+  , thick
+  , fill = white
+  , rounded rectangle
+  , inner sep = 1.25ex
+  }
+%    \end{macrocode}
+% \end{optionkey}
 %
 % \begin{optionkey}{entry}
 % The \key{entry} key is an alias for a double border.
@@ -997,7 +1013,7 @@ This is also the option to use to draw one-way routes.
 % \begin{optionkey}{tgmedge}
 % The \key{tgmedge} option styles the edges representing the routes. We make
 % them black with a white border, so if they cross it appears that the first
-% routes passes under the second.
+% route passes under the second.
 %
 %    \begin{macrocode}
 , tgmedge/.style =
@@ -1007,10 +1023,28 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
+% \begin{optionkey}{go}
+% The \key{go} option sets the \key{tgmedge} style and passes its two arguments
+% to \key{startedge} and \key{endedge} respectively.
+%
 %    \begin{macrocode}
 , go/.style n args = {2}{tgmedge, startedge = {#1}, endedge = {#2}}
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{maze}
+% The \key{maze} option sets the \key{tgmedge} style and passes its two arguments
+% to \key{labelout} and \key{labelin} respectively. It therefore only draws the
+% exits, and does not trigger use of a ‘to’ path.
+%
+%    \begin{macrocode}
 , maze/.style n args = {2}{tgmedge, labelout = {#1}, labelin = {#2}}
 %    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{going}
+% The \key{going} key sets the \key{tgmedge} style, passes its argument to
+% \key{startedge}, and passes the reciprocal of its argument to \key{endedge}.
 %
 %    \begin{macrocode}
 , going/.code = {%
@@ -1054,35 +1088,26 @@ This is also the option to use to draw one-way routes.
   }
 }
 %    \end{macrocode}
+% \end{optionkey}
+%
+% \subsection{Wrapper environments}
 %
 % \begin{environment}{gamemap}
+% The \env{gamemap} environment is simply a \env{tikzpicture} environment with
+% a different set of default styles. Among other things, the \key{tgmnode}
+% style is applied to all nodes within matrices and graphs.
+%
 %    \begin{macrocode}
 \newenvironment{gamemap}[1][]{%
 \begin{tikzpicture}
 [ every matrix/.style =
-  { nodes =
-    { text depth = 0.2em
-    , align = center
-    , draw = black!20
-    , thick
-    , fill = white
-    , rounded rectangle
-    , inner sep = 1.25ex
-    }
+  { nodes = tgmnode
   , column sep = 1em
   , row sep = 1em
   , label distance = -0.5em - 0.2pt
   }
 , graphs/every graph/.style =
-  { nodes =
-    { text depth = 0.2em
-    , align = center
-    , draw = black!20
-    , thick
-    , fill = white
-    , rounded rectangle
-    , inner sep = 1.25ex
-    }
+  { nodes = tgmnode
   , /tikz/label distance = -0.5em - 0.2pt
   }
 , every edge quotes/.append style = {font = \scriptsize}
@@ -1096,6 +1121,7 @@ This is also the option to use to draw one-way routes.
 % \end{environment}
 %
 % \begin{macro}{routes}
+% The \cs{routes} command places its argument on a background layer.
 %    \begin{macrocode}
 \newcommand{\routes}[1]{%
 \begin{scope}
