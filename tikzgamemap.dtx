@@ -354,7 +354,7 @@ TikZ.
 If you have ever played a text adventure game in the Infocom style, you will
 probably recognise the following as being a fairly typical passage.
 
-\begin{tcolorbox}[docexample]
+\begin{tcolorbox}[docexample,sidebyside,righthand width=0.15\linewidth]
 \textbf{Woodland Clearing}
 
 \medskip
@@ -365,17 +365,8 @@ southwest and southeast.
 
 \medskip
 There is a brass lamp here.
-\end{tcolorbox}
 
-In the language of Inform, one of the systems for writing such games, the
-Woodland Clearing in this example is a \emph{room}. The player can travel to other
-rooms by moving in one of twelve possible directions: north, northeast, east,
-southeast, south, southwest, west, northwest, up, down, in and out. As a player,
-in order to keep track of these rooms and how they connect, it is often a good
-idea to record your progress in a simple map. Figure~\ref{fig:clearing} shows
-how you might record this passage.
-
-\begin{figure}
+\tcblower
 \centering
 \begin{gamemap}
 \graph{
@@ -383,9 +374,15 @@ how you might record this passage.
 };
 \end{gamemap}
 \par
-\caption{A representation of a room with three exits}
-\label{fig:clearing}
-\end{figure}
+\end{tcolorbox}
+
+In the language of Inform, one of the systems for writing such games, the
+Woodland Clearing in this example is a \emph{room}. The player can travel to other
+rooms by moving in one of twelve possible directions: north, northeast, east,
+southeast, south, southwest, west, northwest, up, down, in and out. As a player,
+in order to keep track of these rooms and how they connect, it is often a good
+idea to record your progress in a simple map; so you might represent this room
+like the picture on the right of the passage.
 
 The aim of this package is to make it as easy and as natural as possible to
 build up a map of the game world as you play, using TikZ as a graphical backend.
@@ -413,23 +410,30 @@ it, use TikZ commands within it and use it like \env{tikzpicture} with, say,
 the \pkg{standalone} class.
 \end{docEnvironment}
 
+As well as the standard ones, you can also use these options with \env{gamemap}:
+
+\begin{docKey}{set grid}{=\marg{dimension}\marg{dimension}}{\brackets{8em}\brackets{5em}}
+Sets the $x$ and $y$ dimensions of the grid used to lay out rooms, so by default
+the centre of a room at (1, 1) will be 8em to the right and 5em above the origin.
+It also adjusts the aspect ratio of the compass points so that, in this case,
+northeast will be somewhat nearer to east than north.
+\end{docKey}
+
+\begin{docKey}{set compass points}{=\marg{number/dimension}\marg{number/dimension}}{\brackets{8em}\brackets{5em}}
+Adjusts the aspect ratio of the compass points without affecting the $x$ and $y$
+dimensions of the grid, which you can set independently using the normal \key{x}
+and \key{y} options. Since this is all about the ratio, the values you give can
+be numbers or dimensions, so long as you are consistent.
+\end{docKey}
+
+Within the environment, you will also need this:
+
 \begin{docCommand}{graph}{\oarg{options}\marg{routes};}
 This activates the regular TikZ graph-drawing syntax parsing. Add routes through
 the game world within this command. Unfortunately, none of the regular graph
 drawing layouts is particularly suitable for automatically placing rooms, so
 until I can find or write one, your best bet is probably to pass ‘\docValue{no
 placement}’ as the option.
-\end{docCommand}
-
-\begin{docCommand}{matrix}{\oarg{options}\marg{rooms};}
-This activates the regular TikZ matrix syntax parsing, which is very similar to
-regular array\slash table syntax. You can use this to lay out a grid of rooms.
-It is less flexible but may save you some typing.
-\end{docCommand}
-
-\begin{docCommand}{routes}{\marg{paths};}
-After laying out the rooms in a matrix, use this command to specify the routes
-between them.
 \end{docCommand}
 
 \subsection{Drawing a room}
@@ -457,15 +461,19 @@ Marks the room as appearing on another map as well, so that you can split the
 game world across several maps. Visually, it gives the room a thick border.
 \end{docKey}
 
+\begin{docKey}{exit}{=\meta{direction}}{no default, initially empty}
+Marks an unexplored exit from the room. Possible values include \docValue{n},
+\docValue{ne}, \docValue{e}, \docValue{se}, \docValue{s}, \docValue{sw},
+\docValue{w}, and \docValue{nw}. The values \docValue{u}, \docValue{d},
+\docValue{in}, \docValue{o} are special: by default they get positioned NNE,
+SSW, ESE and WNW respectively, but you can specify the exact angle as a value
+of the direction, as in \val{u=}\meta{angle}; if you do, remember the whole
+argument must be wrapped in braces.
+\end{docKey}
+
 \begin{docKey}{exits}{=\marg{list of directions}}{no default, initially empty}
-Marks unexplored exits from the room. If more than one exit is to be marked,
-they should be comma-separated and the whole list wrapped in braces. Possible
-exit values include \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
-\docValue{s}, \docValue{sw}, \docValue{w}, and \docValue{nw}. The values
-\docValue{u}, \docValue{d}, \docValue{in}, \docValue{o} are special: by default
-they get positioned NNE, SSW, ESE and WNW respectively, but you can specify the
-exact angle as an additional argument as in \val{u=}\meta{angle}; if you do,
-remember the whole \key{exits} argument must be wrapped in braces.
+To give more than one exit at once, pass a comma separated list to this option,
+wrapped in braces.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
@@ -479,43 +487,46 @@ remember the whole \key{exits} argument must be wrapped in braces.
 
 \subsection{Positioning rooms}
 
-As mentioned above, there is currently no assistance offered for positioning
-rooms. The recommended approach to use is as follows:
+As mentioned above, the ‘\key{no placement}’ option is currently the best
+one to pass to the \cs{graph} command. This means rooms get positioned at the
+(0, 0) position unless you override this with the \key{x} or \key{y} room
+options or (more likely) both.
 
-\begin{itemize}
-\item
-  Use the \key{x} and \key{y} options of \env{gamemap} to set the size of the
-  grid to use.
-\item
-  Within the \cs{graph} command, use braces to group rooms together.
-  Just after the opening brace, you can add options in square brackets, so use
-  an \key{x} or \key{y} option to set a default value for all the rooms within
-  it to something other than the initial 0.
-\item
-  Pass \key{x} or \key{y} options as necessary to individual rooms.
-\item
-  Separate disconnected rooms with commas.
-\end{itemize}
+Don't forget that if you have to lay out several rooms in a row or column,
+you can wrap them in braces and give the common \key{x} or \key{y} value as an
+option just inside the opening brace, like so:
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
-\begin{gamemap}[x=8em, y=5em]
+\begin{gamemap}
 \graph [no placement] {
   { [y=1]
   "Woodland\\Clearing" [x=1,exits={n,sw,se}],
-  "Fallen\\Tree" [tunnel,x=2,exits=w]
+  "Fallen\\Tree" [x=2,tunnel,exits=w]
   }
 };
 \end{gamemap}
 \end{dispExample*}
 
+If you need to repeat the room later in the same graph, don't pass any options to it.
+
 \subsection{Connecting rooms}
 
-You can connect two rooms by separating them with \texttt{--} instead of a
-comma, thereby drawing the route between them. This package provides
-options you can pass to this route, to label which exit the player character
-needs to take to travel along it.
+The advantage of the TikZ graph syntax is that it naturally lends itself to the
+kind of exploration you do in text adventures.
 
-The simplest case is where a route is symmetrical.
+\begin{enumerate}
+\item Write down the room you are in, marking unexplored exits.
+\item When exploring an exit, remove it from the room options, and use
+  ‘\texttt{--} \oarg{options}’ to mark a route. Then write down the next room.
+\item If you back-track, use a comma to mark the end of the current route and
+  start a new one.
+\end{enumerate}
+
+You can use regular TikZ drawing options to customize the appearance of the
+route (e.g. \key{dashed}, \key{dotted}) but this package provides a few that
+draw exits at either end and shape the route accordingly.
+
+The simplest and most common case is where a route is symmetrical.
 
 \begin{docKey}{going}{=\meta{direction}}{no default, initially empty}
 The direction can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
@@ -525,7 +536,7 @@ be labelled with the given exit, and the end will be labelled with its inverse.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
-\begin{gamemap}[x=8em, y=5em]
+\begin{gamemap}
 \graph [no placement] {
   "Fallen\\Tree" [x=2,y=1] -- [going=w]
   "Woodland\\Clearing" [x=1,y=1] -- [going=u]
@@ -534,7 +545,8 @@ be labelled with the given exit, and the end will be labelled with its inverse.
 \end{gamemap}
 \end{dispExample*}
 
-For more complex cases, the following option can be used instead:
+If the route is asymmetrical, or you need to explicitly position the non-compass
+exits, use the following option instead.
 
 \begin{docKey}{go}{=\marg{direction}\marg{direction}}{no default, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
@@ -542,15 +554,12 @@ The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{d}, \docValue{in}, or \docValue{o}. The beginning of the path will be
 labelled with the first given exit, and the end will be labelled with the
 second. You can explicitly place the non-compass exits at a certain angle around
-the room circumference by giving it as an additional argument, as in
+the room circumference by giving the angle as a value of the direction, as in
 \val{u=}\meta{angle}.
 \end{docKey}
 
-This option is most useful if the route explicitly turns a corner, or if you
-need to explicitly position the up, down, in or out exits.
-
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
-\begin{gamemap}[x=8em, y=5em]
+\begin{gamemap}
 \graph [no placement] {
   "Fallen\\Tree" [x=1.5,y=0] -- [go={n}{se}]
   "Woodland\\Clearing" [x=1,y=1,exits={n,sw}]
@@ -560,8 +569,9 @@ need to explicitly position the up, down, in or out exits.
 \end{dispExample*}
 
 Sometimes a game gives up all pretence of realism and includes a set of
-asymmetric routes deliberately designed to confuse you. For situations such as
-these, the following option can be used.
+asymmetric routes deliberately designed to confuse you. You may also find your
+exploration hampered by one-way routes. For situations such as these,
+the following option can be used.
 
 \begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no default, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
@@ -572,10 +582,8 @@ any attempt to place the exits logically. Any angles given as arguments to a
 direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 \end{docKey}
 
-This is also the option to use to draw one-way routes.
-
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
-\begin{gamemap}[x=8em, y=5em]
+\begin{gamemap}[set grid={8em}{6em}]
 \graph [no placement] {
   "Alcove" [x=5,y=2,exits=n] -- [maze={w}{sw}]
   "Bower" [x=6,y=1.5] -- [maze={e}{n}]
@@ -591,10 +599,33 @@ This is also the option to use to draw one-way routes.
 \end{gamemap}
 \end{dispExample*}
 
+\subsection{Customizing how things look}
+
+\begin{docKey}{tgmnode}{}{}
+This TikZ style is applied to all the room nodes. See section~\ref{sec:room-options}
+for the default definition.
+\end{docKey}
+
+\begin{docKey}{labelnode}{}{}
+This TikZ style is applied to all the exit labels. See section~\ref{sec:exits}
+for the default definition.
+\end{docKey}
+
+\begin{docKey}{tgmedge}{}{}
+This TikZ style is applied to all the route edges. See section~\ref{sec:route-options}
+for the default definition.
+\end{docKey}
+
+You can replace the defaults or append options using \cs{tikzset} in the normal
+way.
+
 \StopEventually{%
+ \clearpage
  \PrintChanges
  \PrintIndex
 }
+
+\clearpage
 
 \section{Implementation}
 
@@ -616,7 +647,7 @@ This is also the option to use to draw one-way routes.
 %
 %    \begin{macrocode}
 \RequirePackage{tikz}
-\usetikzlibrary{graphs, quotes, shapes.misc, backgrounds}
+\usetikzlibrary{graphs, quotes, shapes.misc, matrix, backgrounds}
 %    \end{macrocode}
 %
 % \subsection{Setting the aspect ratio}
@@ -695,6 +726,7 @@ This is also the option to use to draw one-way routes.
     \pgfmathsetmacro{\tgmSSW}{divide(add(\tgmSW, \tgmS ), 2)}%
     \pgfmathsetmacro{\tgmSSE}{divide(add(\tgmS,  \tgmSE), 2)}%
     \pgfmathsetmacro{\tgmESE}{divide(add(\tgmSE, \tgmEE), 2)}%
+  }
 %    \end{macrocode}
 % \end{macro}
 % \end{macro}
@@ -704,16 +736,22 @@ This is also the option to use to draw one-way routes.
 % \end{macro}
 % \end{macro}
 % \end{macro}
+% \end{optionkey}
 %
-% A 2:1 ratio seems a sensible default.
+% \begin{optionkey}{set grid}
+% We provide a convenience option for setting the $x$ and $y$ vectors and the
+% compass points at the same time.
 %
 %    \begin{macrocode}
+, set grid/.code n args = {2}{
+    \pgfkeys{tikz,x = #1}%
+    \pgfkeys{tikz,y = #2}%
+    \pgfkeys{tikz,set compass points = {#1}{#2}}%
   }
-, set compass points = {2}{1}
 %    \end{macrocode}
 % \end{optionkey}
 %
-% \subsection{Room options}
+% \subsection{Room options}\label{sec:room-options}
 %
 % \begin{optionkey}{tgmnode}
 % The \key{tgmnode} key is the base style used for rooms.
@@ -751,7 +789,7 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
-% \subsection{Exits}
+% \subsection{Exits}\label{sec:exits}
 %
 % \begin{optionkey}{labelnode}
 % The \key{labelnode} option controls the appearance of the exits that are drawn
@@ -1008,7 +1046,7 @@ This is also the option to use to draw one-way routes.
 %    \end{macrocode}
 % \end{optionkey}
 %
-% \subsection{Route options}
+% \subsection{Route options}\label{sec:route-options}
 %
 % \begin{optionkey}{tgmedge}
 % The \key{tgmedge} option styles the edges representing the routes. We make
@@ -1095,17 +1133,13 @@ This is also the option to use to draw one-way routes.
 % \begin{environment}{gamemap}
 % The \env{gamemap} environment is simply a \env{tikzpicture} environment with
 % a different set of default styles. Among other things, the \key{tgmnode}
-% style is applied to all nodes within matrices and graphs.
+% style is applied to all nodes within graphs. The leading for multiline text
+% is reduced with \cs{linespread}.
 %
 %    \begin{macrocode}
 \newenvironment{gamemap}[1][]{%
 \begin{tikzpicture}
-[ every matrix/.style =
-  { nodes = tgmnode
-  , column sep = 1em
-  , row sep = 1em
-  , label distance = -0.5em - 0.2pt
-  }
+[ set grid = {8em}{5em}
 , graphs/every graph/.style =
   { nodes = tgmnode
   , /tikz/label distance = -0.5em - 0.2pt
@@ -1119,19 +1153,6 @@ This is also the option to use to draw one-way routes.
 }
 %    \end{macrocode}
 % \end{environment}
-%
-% \begin{macro}{routes}
-% The \cs{routes} command places its argument on a background layer.
-%    \begin{macrocode}
-\newcommand{\routes}[1]{%
-\begin{scope}
-[ semithick
-, on background layer
-]
-#1
-\end{scope}}
-%    \end{macrocode}
-% \end{macro}
 %
 % \iffalse %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %</tgm1>
