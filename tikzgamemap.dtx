@@ -121,10 +121,10 @@ Alex Ball.
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
 \usepackage{multicol}
 \usepackage{enumitem}
-\setlist[itemize]{%
-  topsep={6pt plus 2pt minus 1pt},%
+\setlist[itemize,enumerate]{%
+  topsep={0pt plus 0.05em},%
   partopsep={0pt plus 0.05em},%
-  itemsep={0.2em plus 0.05em minus 0.05em},%
+  itemsep={6pt plus 0.05em minus 0.05em},%
   parsep={0pt plus 0.05em},%
 }
 \usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
@@ -161,6 +161,7 @@ Alex Ball.
   , color value=Value
   , color color=Color
   , colbacktitle=ExampleFrame!33!ExampleBack
+  , docexample/.append style = {parskip}
   }
 \renewcommand{\theFancyVerbLine}{\footnotesize\itshape\color{gray}\arabic{FancyVerbLine}}
 \let\tcbcs=\cs
@@ -443,11 +444,17 @@ breaks, add them manually.
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}
-\graph{
-  "Woodland\\Clearing"
-};
+\graph{ "Woodland\\Clearing" };
 \end{gamemap}
 \end{dispExample*}
+
+You can refer to the room again later in the same graph by giving its ID, which
+is normally the same as its name. To give it a different ID, write the room
+initially as \meta{ID}\slash\meta{name}, e.g.\@
+\tcbox[docexample,size=small,on line]{|wc/"Woodland\\Clearing"|}.
+This is useful if you have to write it several times and want to save some
+typing, or if the game tries to confuse you by giving multiple rooms the same
+name.
 
 You can change the appearance of the room with the following options:
 
@@ -467,8 +474,8 @@ Marks an unexplored exit from the room. Possible values include \docValue{n},
 \docValue{w}, and \docValue{nw}. The values \docValue{u}, \docValue{d},
 \docValue{in}, \docValue{o} are special: by default they get positioned NNE,
 SSW, ESE and WNW respectively, but you can specify the exact angle as a value
-of the direction, as in \val{u=}\meta{angle}; if you do, remember the whole
-argument must be wrapped in braces.
+of the direction, as in \val{u=}\meta{angle}; if you do, the whole argument must
+be wrapped in braces.
 \end{docKey}
 
 \begin{docKey}{exits}{=\marg{list of directions}}{no default, initially empty}
@@ -485,6 +492,9 @@ wrapped in braces.
 \end{gamemap}
 \end{dispExample*}
 
+To keep things simple, I recommend you only pass options to a room the first
+time you mention it within a graph.
+
 \subsection{Positioning rooms}
 
 As mentioned above, the ‘\key{no placement}’ option is currently the best
@@ -492,7 +502,7 @@ one to pass to the \cs{graph} command. This means rooms get positioned at the
 (0, 0) position unless you override this with the \key{x} or \key{y} room
 options or (more likely) both.
 
-Don't forget that if you have to lay out several rooms in a row or column,
+If you have to lay out several rooms in a row or column,
 you can wrap them in braces and give the common \key{x} or \key{y} value as an
 option just inside the opening brace, like so:
 
@@ -506,8 +516,6 @@ option just inside the opening brace, like so:
 };
 \end{gamemap}
 \end{dispExample*}
-
-If you need to repeat the room later in the same graph, don't pass any options to it.
 
 \subsection{Connecting rooms}
 
@@ -582,42 +590,47 @@ any attempt to place the exits logically. Any angles given as arguments to a
 direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 \end{docKey}
 
-\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{dispExample*}{sidebyside,righthand width=0.27\linewidth}
 \begin{gamemap}[set grid={8em}{6em}]
 \graph [no placement] {
-  "Alcove" [x=5,y=2,exits=n] -- [maze={w}{sw}]
-  "Bower" [x=6,y=1.5] -- [maze={e}{n}]
-  "Corner" [x=6,y=0.5] -- [maze={nw}{null}]
-  "Doorway" [x=5,y=1] -- [maze={sw}{null}]
-  "Ewery" [x=5,y=0,exits=s] -- [maze={se}{null}],
-  "Alcove" -- [maze={sw}{s}] "Corner",
-  "Alcove" -- [maze={ne}{nw}] "Doorway",
-  "Bower" -- [maze={ne}{s}] "Doorway",
-  "Bower" -- [maze={nw}{w}] "Ewery",
-  "Corner" -- [maze={se}{e}] "Ewery"
+  a/"Twisty\\Bit" [x=0,y=2,exit=nw] -- [maze={w}{sw}]
+  b/"Twisty\\Bit" [x=1,y=1.5] -- [maze={e}{n}]
+  c/"Twisty\\Bit" [x=1,y=0.5] -- [maze={nw}{null}]
+  d/"Twisty\\Bit" [x=0,y=1] -- [maze={sw}{null}]
+  e/"Twisty\\Bit" [x=0,y=0,exit=se],
+  a -- [maze={sw}{s}] c,
+  a -- [maze={ne}{nw}] d,
+  b -- [maze={ne}{s}] d,
+  b -- [maze={nw}{w}] e,
+  c -- [maze={se}{e}] e
 };
 \end{gamemap}
 \end{dispExample*}
 
 \subsection{Customizing how things look}
 
-\begin{docKey}{tgmnode}{}{}
-This TikZ style is applied to all the room nodes. See section~\ref{sec:room-options}
-for the default definition.
+\begin{docKey}{tgmnode}{}{default: see section~\ref{sec:room-options}}
+This TikZ style is applied to all the room nodes.
 \end{docKey}
 
-\begin{docKey}{labelnode}{}{}
-This TikZ style is applied to all the exit labels. See section~\ref{sec:exits}
-for the default definition.
+\begin{docKey}{labelnode}{}{default: see section~\ref{sec:exits}}
+This TikZ style is applied to all the exit labels.
 \end{docKey}
 
-\begin{docKey}{tgmedge}{}{}
-This TikZ style is applied to all the route edges. See section~\ref{sec:route-options}
-for the default definition.
+\begin{docKey}{tgmedge}{}{default: see section~\ref{sec:route-options}}
+This TikZ style is applied to all the route edges.
 \end{docKey}
 
 You can replace the defaults or append options using \cs{tikzset} in the normal
 way.
+
+\begin{dispExample*}{sidebyside,righthand width=0.25\linewidth}
+\tikzset{tgmnode/.append style = {fill=yellow!25},
+       labelnode/.append style = {fill=green!10}}
+\begin{gamemap}
+\graph{ "Woodland\\Clearing" [exits={n,sw,se}] };
+\end{gamemap}
+\end{dispExample*}
 
 \StopEventually{%
  \clearpage
