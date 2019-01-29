@@ -129,6 +129,7 @@ Alex Ball.
 }
 \usepackage[bookmarks,raiselinks,pageanchor,hyperindex,colorlinks]{hyperref}
 \usepackage{etoolbox}
+\usepackage{xstring}
 \usepackage{tcolorbox,doc}
 \makeatletter
 \renewenvironment{theglossary}{%
@@ -177,8 +178,8 @@ Alex Ball.
 \newcommand*{\val}[1]{\textcolor{Value}{\ttfamily #1}}
 \makeatletter
 \renewenvironment{macro}[1]{%
-  \def\MyName{#1}%
-  \edef\saved@macroname{\textbackslash #1}%
+  \StrSubstitute{#1}{\detokenize{@}}{"@}[\MyName]%
+  \edef\saved@macroname{\expandafter\string\csname #1\endcsname}%
   \let\saved@indexname\saved@macroname
   \index{\MyName @\tcbIndexPrintComC {\MyName}|(emph}%
 }{%
@@ -188,7 +189,7 @@ Alex Ball.
   \index{\MyName @\tcbIndexPrintComC {\MyName}|)}%
 }
 \renewenvironment{environment}[1]{%
-  \def\MyName{#1}%
+  \StrSubstitute{#1}{\detokenize{@}}{"@}[\MyName]%
   \edef\saved@macroname{#1}%
   \let\saved@indexname\saved@macroname
   \index{\MyName @\tcbIndexPrintEnvCA {\MyName}|(emph}%
@@ -338,7 +339,7 @@ Alex Ball.
 
 \maketitle
 
-\changes{v1.00}{2019/01/12}{First public release}
+\changes{v0.1}{2019/01/12}{First public release}
 
 \begin{abstract}
 While interactive fiction can come in many different varieties, there is a class
