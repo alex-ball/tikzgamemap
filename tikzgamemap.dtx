@@ -614,8 +614,20 @@ direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 This TikZ style is applied to all the room nodes.
 \end{docKey}
 
-\begin{docKey}{labelnode}{}{default: see section~\ref{sec:exits}}
+\begin{docKey}{label node}{}{default: see section~\ref{sec:exits}}
 This TikZ style is applied to all the exit labels.
+\end{docKey}
+
+\begin{docKey}{exit node}{}{default: see section~\ref{sec:exits}}
+This TikZ style is applied to exits drawn by the \refKey*{exit} option. It
+applies the \key{label node} style and adds \key{fill} and \key{draw}
+properties.
+\end{docKey}
+
+\begin{docKey}{transit node}{}{default: see section~\ref{sec:exits}}
+This TikZ style is applied to exits drawn by the \refKey*{go}, \refKey*{going}
+and \refKey*{maze} options. It applies the \key{label node} style and adds
+\key{fill} and \key{draw} properties.
 \end{docKey}
 
 \begin{docKey}{tgmedge}{}{default: see section~\ref{sec:route-options}}
@@ -627,7 +639,7 @@ way.
 
 \begin{dispExample*}{sidebyside,righthand width=0.25\linewidth}
 \tikzset{tgmnode/.append style = {fill=yellow!25},
-       labelnode/.append style = {fill=green!10}}
+       exit node/.append style = {fill=green!10}}
 \begin{gamemap}
 \graph{ "Woodland\\Clearing" [exits={n,sw,se}] };
 \end{gamemap}
@@ -810,14 +822,22 @@ way.
 % on the periphery of the rooms.
 %
 %    \begin{macrocode}
-, labelnode/.style =
+, label node/.style =
   { font = \tiny
   , minimum size = 1em
   , circle
-  , fill = white
-  , draw = black!20
   , thin
   , inner sep = 0pt
+  }
+, exit node/.style =
+  { label node
+  , fill = white
+  , draw = black!20
+  }
+, transit node/.style =
+  { label node
+  , fill = white
+  , draw = black!20
   }
 %    \end{macrocode}
 % \end{optionkey}
@@ -833,27 +853,27 @@ way.
 %
 %    \begin{macrocode}
 , exit/.is choice
-, exit/e/.style    = {label={[labelnode]\tgmE:E}}
-, exit/ne/.style   = {label={[labelnode]\tgmNE:\textsc{ne}}}
-, exit/n/.style    = {label={[labelnode]\tgmN:N}}
-, exit/nw/.style   = {label={[labelnode]\tgmNW:\textsc{nw}}}
-, exit/w/.style    = {label={[labelnode]\tgmW:W}}
-, exit/sw/.style   = {label={[labelnode]\tgmSW:\textsc{sw}}}
-, exit/s/.style    = {label={[labelnode]\tgmS:S}}
-, exit/se/.style   = {label={[labelnode]\tgmSE:\textsc{se}}}
+, exit/e/.style    = {label={[exit node]\tgmE:E}}
+, exit/ne/.style   = {label={[exit node]\tgmNE:\textsc{ne}}}
+, exit/n/.style    = {label={[exit node]\tgmN:N}}
+, exit/nw/.style   = {label={[exit node]\tgmNW:\textsc{nw}}}
+, exit/w/.style    = {label={[exit node]\tgmW:W}}
+, exit/sw/.style   = {label={[exit node]\tgmSW:\textsc{sw}}}
+, exit/s/.style    = {label={[exit node]\tgmS:S}}
+, exit/se/.style   = {label={[exit node]\tgmSE:\textsc{se}}}
 %    \end{macrocode}
 %
 % For the non-compass directions, the angle has a default that can be overridden
 % by an argument value.
 %
 %    \begin{macrocode}
-, exit/u/.style    = {label={[labelnode]#1:U}}
+, exit/u/.style    = {label={[exit node]#1:U}}
 , exit/u/.default  = {\tgmNNE}
-, exit/d/.style    = {label={[labelnode]#1:D}}
+, exit/d/.style    = {label={[exit node]#1:D}}
 , exit/d/.default  = {\tgmSSW}
-, exit/in/.style   = {label={[labelnode]#1:in}}
+, exit/in/.style   = {label={[exit node]#1:in}}
 , exit/in/.default = {\tgmESE}
-, exit/o/.style    = {label={[labelnode]#1:O}}
+, exit/o/.style    = {label={[exit node]#1:O}}
 , exit/o/.default  = {\tgmWNW}
 %    \end{macrocode}
 % \end{optionkey}
@@ -876,18 +896,18 @@ way.
 %
 %    \begin{macrocode}
 , labelin/.is choice
-, labelin/e/.style   = { edge node={node [labelnode, pos=1] {E}} }
-, labelin/ne/.style  = { edge node={node [labelnode, pos=1] {\textsc{ne}}} }
-, labelin/n/.style   = { edge node={node [labelnode, pos=1] {N}} }
-, labelin/nw/.style  = { edge node={node [labelnode, pos=1] {\textsc{nw}}} }
-, labelin/w/.style   = { edge node={node [labelnode, pos=1] {W}} }
-, labelin/sw/.style  = { edge node={node [labelnode, pos=1] {\textsc{sw}}} }
-, labelin/s/.style   = { edge node={node [labelnode, pos=1] {S}} }
-, labelin/se/.style  = { edge node={node [labelnode, pos=1] {\textsc{se}}} }
-, labelin/u/.style   = { edge node={node [labelnode, pos=1] {U}} }
-, labelin/d/.style   = { edge node={node [labelnode, pos=1] {D}} }
-, labelin/in/.style  = { edge node={node [labelnode, pos=1] {in}} }
-, labelin/o/.style   = { edge node={node [labelnode, pos=1] {O}} }
+, labelin/e/.style   = { edge node={node [transit node, pos=1] {E}} }
+, labelin/ne/.style  = { edge node={node [transit node, pos=1] {\textsc{ne}}} }
+, labelin/n/.style   = { edge node={node [transit node, pos=1] {N}} }
+, labelin/nw/.style  = { edge node={node [transit node, pos=1] {\textsc{nw}}} }
+, labelin/w/.style   = { edge node={node [transit node, pos=1] {W}} }
+, labelin/sw/.style  = { edge node={node [transit node, pos=1] {\textsc{sw}}} }
+, labelin/s/.style   = { edge node={node [transit node, pos=1] {S}} }
+, labelin/se/.style  = { edge node={node [transit node, pos=1] {\textsc{se}}} }
+, labelin/u/.style   = { edge node={node [transit node, pos=1] {U}} }
+, labelin/d/.style   = { edge node={node [transit node, pos=1] {D}} }
+, labelin/in/.style  = { edge node={node [transit node, pos=1] {in}} }
+, labelin/o/.style   = { edge node={node [transit node, pos=1] {O}} }
 , labelin/null/.style = {}
 %    \end{macrocode}
 % \end{optionkey}
@@ -898,18 +918,18 @@ way.
 %
 %    \begin{macrocode}
 , labelout/.is choice
-, labelout/e/.style  = { edge node={node [labelnode, pos=0] {E}} }
-, labelout/ne/.style = { edge node={node [labelnode, pos=0] {\textsc{ne}}} }
-, labelout/n/.style  = { edge node={node [labelnode, pos=0] {N}} }
-, labelout/nw/.style = { edge node={node [labelnode, pos=0] {\textsc{nw}}} }
-, labelout/w/.style  = { edge node={node [labelnode, pos=0] {W}} }
-, labelout/sw/.style = { edge node={node [labelnode, pos=0] {\textsc{sw}}} }
-, labelout/s/.style  = { edge node={node [labelnode, pos=0] {S}} }
-, labelout/se/.style = { edge node={node [labelnode, pos=0] {\textsc{se}}} }
-, labelout/u/.style  = { edge node={node [labelnode, pos=0] {U}} }
-, labelout/d/.style  = { edge node={node [labelnode, pos=0] {D}} }
-, labelout/in/.style = { edge node={node [labelnode, pos=0] {in}} }
-, labelout/o/.style  = { edge node={node [labelnode, pos=0] {O}} }
+, labelout/e/.style  = { edge node={node [transit node, pos=0] {E}} }
+, labelout/ne/.style = { edge node={node [transit node, pos=0] {\textsc{ne}}} }
+, labelout/n/.style  = { edge node={node [transit node, pos=0] {N}} }
+, labelout/nw/.style = { edge node={node [transit node, pos=0] {\textsc{nw}}} }
+, labelout/w/.style  = { edge node={node [transit node, pos=0] {W}} }
+, labelout/sw/.style = { edge node={node [transit node, pos=0] {\textsc{sw}}} }
+, labelout/s/.style  = { edge node={node [transit node, pos=0] {S}} }
+, labelout/se/.style = { edge node={node [transit node, pos=0] {\textsc{se}}} }
+, labelout/u/.style  = { edge node={node [transit node, pos=0] {U}} }
+, labelout/d/.style  = { edge node={node [transit node, pos=0] {D}} }
+, labelout/in/.style = { edge node={node [transit node, pos=0] {in}} }
+, labelout/o/.style  = { edge node={node [transit node, pos=0] {O}} }
 , labelout/null/.style = {}
 %    \end{macrocode}
 % \end{optionkey}
