@@ -560,11 +560,13 @@ exits, use the following option instead.
 \begin{docKey}{go}{=\marg{direction}\marg{direction}}{no default, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
-\docValue{d}, \docValue{in}, or \docValue{o}. The beginning of the path will be
-labelled with the first given exit, and the end will be labelled with the
-second. You can explicitly place the non-compass exits at a certain angle around
-the room circumference by giving the angle as a value of the direction, as in
-\val{u=}\meta{angle}.
+\docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. The beginning of
+the path will be labelled with the first given exit, and the end will be
+labelled with the second. You can explicitly place the non-compass exits at a
+certain angle around the room circumference by giving the angle as a value of
+the direction, as in \val{u=}\meta{angle}. If you use the \val{null} direction,
+no label will be drawn (indicating a one-way route), and you should definitely
+specify an angle to avoid disappointment.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
@@ -578,9 +580,8 @@ the room circumference by giving the angle as a value of the direction, as in
 \end{dispExample*}
 
 Sometimes a game gives up all pretence of realism and includes a set of
-asymmetric routes deliberately designed to confuse you. You may also find your
-exploration hampered by one-way routes. For situations such as these,
-the following option can be used.
+asymmetric routes deliberately designed to confuse you. For situations such as
+these, the following option can be used.
 
 \begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no default, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
@@ -1005,6 +1006,20 @@ way.
   }
 , startedge/o/.default  = {\tgmWNW}
 %    \end{macrocode}
+%
+% The default value is \val{null}, which prints no label but can establish a
+% direction.
+%
+%    \begin{macrocode}
+, startedge/.default = null
+, startedge/null/.code = {%
+    \pgfkeys{tikz, labelout/null}%
+    \ifblank{#1}{}{%
+      \pgfkeys{tikz, out = {#1}}%
+    }%
+  }
+, startedge/null/.default  = {}
+%    \end{macrocode}
 % \end{optionkey}
 %
 % \begin{optionkey}{startedge}
@@ -1073,11 +1088,18 @@ way.
 , endedge/o/.default  = {\tgmWNW}
 %    \end{macrocode}
 %
-% The default value is \val{null}, which does nothing.
+% The default value is \val{null}, which prints no label but can establish a
+% direction.
 %
 %    \begin{macrocode}
 , endedge/.default = null
-, endedge/null/.style = {}
+, endedge/null/.code = {%
+    \pgfkeys{tikz, labelin/null}%
+    \ifblank{#1}{}{%
+      \pgfkeys{tikz, in = {#1}}%
+    }%
+  }
+, endedge/null/.default  = {}
 %    \end{macrocode}
 % \end{optionkey}
 %
