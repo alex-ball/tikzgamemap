@@ -633,36 +633,35 @@ direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 
 \subsection{Customizing how things look}
 
-\begin{docKey}{tgmnode}{}{default: see section~\ref{sec:room-options}}
+\begin{docKey}{tgmnode}{}{initially: see section~\ref{sec:room-options}}
 This TikZ style is applied to all the room nodes.
 \end{docKey}
 
-\begin{docKey}{label node}{}{default: see section~\ref{sec:exits}}
+\begin{docKey}{label node}{}{initially: see section~\ref{sec:exits}}
 This TikZ style is applied to all the exit labels.
 \end{docKey}
 
-\begin{docKey}{exit node}{}{default: see section~\ref{sec:exits}}
+\begin{docKey}{exit node}{}{initially: \key{label node}}
 This TikZ style is applied to exits drawn by the \refKey*{exit} option. It
-applies the \key{label node} style and adds \key{fill} and \key{draw}
-properties.
+just applies the \key{label node} style initially.
 \end{docKey}
 
-\begin{docKey}{transit node}{}{default: see section~\ref{sec:exits}}
+\begin{docKey}{transit node}{}{initially: \key{label node}}
 This TikZ style is applied to exits drawn by the \refKey*{go}, \refKey*{going}
-and \refKey*{maze} options. It applies the \key{label node} style and adds
-\key{fill} and \key{draw} properties.
+and \refKey*{maze} options. It just applies the \key{label node} style
+initially.
 \end{docKey}
 
-\begin{docKey}{tgmedge}{}{default: see section~\ref{sec:route-options}}
+\begin{docKey}{tgmedge}{}{initially: see section~\ref{sec:route-options}}
 This TikZ style is applied to all the route edges.
 \end{docKey}
 
 You can replace the defaults or append options using \cs{tikzset} in the normal
 way.
 
-\begin{dispExample*}{sidebyside,righthand width=0.25\linewidth}
+\begin{dispExample*}{sidebyside,righthand width=0.18\linewidth}
 \tikzset{tgmnode/.append style = {fill=yellow!25},
-       exit node/.append style = {fill=green!10}}
+       exit node/.append style = {fill=green!10,rectangle}}
 \begin{gamemap}
 \graph{ "Woodland\\Clearing" [exits={n,sw,se}] };
 \end{gamemap}
@@ -841,9 +840,12 @@ way.
 %
 % \subsection{Exits}\label{sec:exits}
 %
-% \begin{optionkey}{labelnode}
-% The \key{labelnode} option controls the appearance of the exits that are drawn
-% on the periphery of the rooms.
+% \begin{optionkey}{label node}
+% \begin{optionkey}{exit node}
+% \begin{optionkey}{transit node}
+% The \key{label node} option controls the appearance of the exits that are drawn
+% on the periphery of the rooms. This base style is inherited by \key{exit node}
+% and \key{transit node}, which could be amended to do different things.
 %
 %    \begin{macrocode}
 , label node/.style =
@@ -852,18 +854,18 @@ way.
   , circle
   , thin
   , inner sep = 0pt
+  , fill = white
+  , draw = black!20
   }
 , exit node/.style =
   { label node
-  , fill = white
-  , draw = black!20
   }
 , transit node/.style =
   { label node
-  , fill = white
-  , draw = black!20
   }
 %    \end{macrocode}
+% \end{optionkey}
+% \end{optionkey}
 % \end{optionkey}
 %
 % \subsubsection{Exits as labels on nodes}
