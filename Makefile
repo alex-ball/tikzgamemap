@@ -9,7 +9,7 @@ UTREE = $(shell kpsewhich --var-value TEXMFHOME)
 
 .PHONY: source clean distclean inst uninst install uninstall zip ctan
 
-all:	$(NAME).pdf
+all: $(NAME).pdf
 
 source: $(NAME).dtx
 	tex -shell-escape -recorder -interaction=batchmode $(NAME).dtx >/dev/null
