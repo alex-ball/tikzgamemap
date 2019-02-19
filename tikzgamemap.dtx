@@ -414,14 +414,16 @@ the \pkg{standalone} class.
 
 As well as the standard ones, you can also use these options with \env{gamemap}:
 
-\begin{docKey}{set grid}{=\marg{dimension}\marg{dimension}}{\brackets{8em}\brackets{5em}}
+\begin{docKey}{set grid}{=\marg{dimension}\marg{dimension}}%
+{no default, initially \brackets{8em}\brackets{5em}}
 Sets the $x$ and $y$ dimensions of the grid used to lay out rooms, so by default
 the centre of a room at (1, 1) will be 8em to the right and 5em above the origin.
 It also adjusts the aspect ratio of the compass points so that, in this case,
 northeast will be somewhat nearer to east than north.
 \end{docKey}
 
-\begin{docKey}{set compass points}{=\marg{number/dimension}\marg{number/dimension}}{\brackets{8em}\brackets{5em}}
+\begin{docKey}{set compass points}{=\marg{number/dimension}\marg{number/dimension}}%
+{initially \brackets{8em}\brackets{5em}}
 Adjusts the aspect ratio of the compass points without affecting the $x$ and $y$
 dimensions of the grid, which you can set independently using the normal \key{x}
 and \key{y} options. Since this is all about the ratio, the values you give can
@@ -579,7 +581,7 @@ be labelled with the given exit, and the end will be labelled with its inverse.
 If the route is asymmetrical, or you need to explicitly position the non-compass
 exits, use the following option instead.
 
-\begin{docKey}{go}{=\marg{direction}\marg{direction}}{no default, initially empty}
+\begin{docKey}{go}{=\marg{direction}\marg{direction}}{no defaults, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
 \docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. The beginning of
@@ -605,7 +607,7 @@ Sometimes a game gives up all pretence of realism and includes a set of
 asymmetric routes deliberately designed to confuse you. For situations such as
 these, the following option can be used.
 
-\begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no default, initially empty}
+\begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no defaults, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
 \docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. This behaves much
@@ -633,26 +635,26 @@ direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 
 \subsection{Customizing how things look}
 
-\begin{docKey}{tgmnode}{}{initially: see section~\ref{sec:room-options}}
+\begin{docKey}{tgmnode}{}{see section~\ref{sec:room-options} for initial value}
 This TikZ style is applied to all the room nodes.
 \end{docKey}
 
-\begin{docKey}{label node}{}{initially: see section~\ref{sec:exits}}
+\begin{docKey}{label node}{}{see section~\ref{sec:exits} for initial value}
 This TikZ style is applied to all the exit labels.
 \end{docKey}
 
-\begin{docKey}{exit node}{}{initially: \key{label node}}
+\begin{docKey}{exit node}{}{initially \key{label node}}
 This TikZ style is applied to exits drawn by the \refKey*{exit} option. It
 just applies the \key{label node} style initially.
 \end{docKey}
 
-\begin{docKey}{transit node}{}{initially: \key{label node}}
+\begin{docKey}{transit node}{}{initially \key{label node}}
 This TikZ style is applied to exits drawn by the \refKey*{go}, \refKey*{going}
 and \refKey*{maze} options. It just applies the \key{label node} style
 initially.
 \end{docKey}
 
-\begin{docKey}{tgmedge}{}{initially: see section~\ref{sec:route-options}}
+\begin{docKey}{tgmedge}{}{see section~\ref{sec:route-options} for initial value}
 This TikZ style is applied to all the route edges.
 \end{docKey}
 
@@ -661,9 +663,13 @@ way.
 
 \begin{dispExample*}{sidebyside,righthand width=0.18\linewidth}
 \tikzset{tgmnode/.append style = {fill=yellow!25},
-       exit node/.append style = {fill=green!10,rectangle}}
+       exit node/.append style = {fill=red!10,rectangle},
+      label node/.append style = {fill=green!10}}
 \begin{gamemap}
-\graph{ "Woodland\\Clearing" [exits={n,sw,se}] };
+\graph[no placement]{
+  "Woodland\\Clearing" [exits={n,sw}]  -- [go={se}{ne}]
+  "Fallen Tree" [y=-1]
+};
 \end{gamemap}
 \end{dispExample*}
 
