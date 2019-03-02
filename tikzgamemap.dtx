@@ -855,6 +855,41 @@ way.
 %    \end{macrocode}
 % \end{optionkey}
 %
+% \begin{optionkey}{note node}
+% The \key{note node} style makes the text size smaller.
+%
+%    \begin{macrocode}
+, note node/.style =
+  { label distance=0pt
+  , /tikz/font=\scriptsize
+  }
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{note}
+% The \key{note} key applies a label to the outside of the node.
+%
+%    \begin{macrocode}
+, note/.code = {%
+    \pgfutil@ifnextchar[%]
+      { \tgm@note@opt }%
+      { \tgm@note@nonopt }%
+    #1\pgf@nil
+  }
+%    \end{macrocode}
+% \end{optionkey}
+%
+% These are the helper macros for parsing arguments to the \key{note} option.
+%    \begin{macrocode}
+}
+\def\tgm@note@opt[#1]#2\pgf@nil{%
+  \pgfkeys{ tikz,label = {[note node, #1]#2} }
+}
+\def\tgm@note@nonopt#1\pgf@nil{%
+  \pgfkeys{ tikz,label = {[note node]#1} }
+}
+%    \end{macrocode}
+%
 % \subsection{Exits}\label{sec:exits}
 %
 % \begin{optionkey}{label node}
@@ -865,8 +900,10 @@ way.
 % and \key{transit node}, which could be amended to do different things.
 %
 %    \begin{macrocode}
-, label node/.style =
-  { font = \tiny
+\tikzset
+{ label node/.style =
+  { label distance = -0.5em - 0.2pt
+  , font = \tiny
   , minimum size = 1em
   , circle
   , thin
@@ -1257,7 +1294,6 @@ way.
 [ set grid = {8em}{5em}
 , graphs/every graph/.style =
   { nodes = tgmnode
-  , /tikz/label distance = -0.5em - 0.2pt
   }
 , every edge quotes/.append style = {font = \scriptsize}
 , #1
