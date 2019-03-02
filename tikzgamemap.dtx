@@ -502,14 +502,22 @@ be wrapped in braces.
 
 In some games you may find that to exit the room you have to do something
 instead of moving in a given direction. For such cases you can use the
-\docValue{act} key, which takes two arguments: \val{act=}\marg{label}\marg{angle}
+\docValue{act} value, which takes two arguments:
+\val{act=}\marg{label}\marg{angle}.
+\end{docKey}
+
+\begin{docKey}{note}{=\meta{label specification}}{no default, initially empty}
+Since you don't have room for long strings in the exit label, you can use this
+key to position a note by the room to decode the letter or symbol you used. The
+syntax is the same as for the regular \key{label} option, but this injects the
+\key{note node} style.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}
 \graph{
-  "Treetop"
-    [entry,exits={d,act={\S}{90}}]
+  "Treetop" [exit={act={\S}{90}},
+    note={[text=red]270:\S\ Call Skylar}]
 };
 \end{gamemap}
 \end{dispExample*}
@@ -595,21 +603,24 @@ exits, use the following option instead.
 \begin{docKey}{go}{=\marg{direction}\marg{direction}}{no defaults, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
-\docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. The beginning of
-the path will be labelled with the first given exit, and the end will be
-labelled with the second. You can explicitly place the non-compass exits at a
-certain angle around the room circumference by giving the angle as a value of
-the direction, as in \val{u=}\meta{angle}. If you use the \val{null} direction,
-no label will be drawn (indicating a one-way route), and you should definitely
-specify an angle to avoid disappointment.
+\docValue{d}, \docValue{in}, \docValue{o}, \docValue{act}, or \docValue{null}.
+The beginning of the path will be labelled with the first given exit, and the
+end will be labelled with the second. You can explicitly place the non-compass
+exits at a certain angle around the room circumference by giving the angle as a
+value of the direction, as in \val{u=}\meta{angle}. If you use the \val{null}
+direction, no label will be drawn (indicating a one-way route), and you should
+definitely specify an angle to avoid disappointment. Use the
+\val{act=}\marg{label}\marg{angle} option to specify a custom exit.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
 \begin{gamemap}
 \graph [no placement] {
-  "Fallen\\Tree" [x=1.5,y=0] -- [go={n}{se}]
+  "Fallen\\Tree" [x=1.4,y=0] -- [go={n}{se}]
   "Woodland\\Clearing" [x=1,y=1,exits={n,sw}]
   -- [go={u=0}{d=180}] "Treetop" [x=2,y=1]
+  -- [go={act={\S}{270}}{null=110}]
+  "Eyrie" [x=2.2,y=0,exit=d]
 };
 \end{gamemap}
 \end{dispExample*}
@@ -621,10 +632,11 @@ these, the following option can be used.
 \begin{docKey}{maze}{=\marg{direction}\marg{direction}}{no defaults, initially empty}
 The directions can be \docValue{n}, \docValue{ne}, \docValue{e}, \docValue{se},
 \docValue{s}, \docValue{sw}, \docValue{w}, \docValue{nw}, \docValue{u},
-\docValue{d}, \docValue{in}, \docValue{o}, or \docValue{null}. This behaves much
-like \key{go} except that the route is drawn straight between the rooms, without
-any attempt to place the exits logically. Any angles given as arguments to a
-direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
+\docValue{d}, \docValue{in}, \docValue{o}, \docValue{act}, or \docValue{null}.
+This behaves much like \key{go} except that the route is drawn straight between
+the rooms, without any attempt to place the exits logically. Any angles given as
+arguments to a direction are thus ignored. Use \val{null} to avoid drawing an
+exit at all and \val{act=}\marg{label} to use a custom exit label.
 \end{docKey}
 
 \begin{dispExample*}{sidebyside,righthand width=0.27\linewidth}
@@ -648,6 +660,10 @@ direction are thus ignored. Use \val{null} to avoid drawing an exit at all.
 
 \begin{docKey}{tgmnode}{}{see section~\ref{sec:room-options} for initial value}
 This TikZ style is applied to all the room nodes.
+\end{docKey}
+
+\begin{docKey}{note node}{}{see section~\ref{sec:room-options} for initial value}
+This TikZ style is applied to all notes attached to room nodes.
 \end{docKey}
 
 \begin{docKey}{label node}{}{see section~\ref{sec:exits} for initial value}
