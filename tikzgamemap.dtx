@@ -389,9 +389,6 @@ like the picture on the right of the passage.
 
 The aim of this package is to make it as easy and as natural as possible to
 build up a map of the game world as you play, using TikZ as a graphical backend.
-I do not claim to have achieved this on the first attempt, which is why I have
-left myself some wiggle room in the naming of the package file. (You will see
-what I mean in a moment.)
 
 \section{Usage}
 
@@ -477,10 +474,10 @@ breaks, add them manually.
 You can refer to the room again later in the same graph by giving its ID, which
 is normally the same as its name. To give it a different ID, write the room
 initially as \meta{ID}\slash\meta{name}, e.g.\@
-\tcbox[docexample,size=small,on line]{|wc/"Woodland\\Clearing"|}.
-This is useful if you have to write it several times and want to save some
-typing, or if the game tries to confuse you by giving multiple rooms the same
-name.
+\tcbox[docexample,size=small,on line]{|wc/"Woodland\textbackslash\textbackslash
+Clearing"|}. This is useful if you have to write it several times and want to
+save some typing, or if the game tries to confuse you by giving multiple rooms
+the same name.
 
 You can change the appearance of the room with the following options:
 
@@ -502,7 +499,20 @@ Marks an unexplored exit from the room. Possible values include \docValue{n},
 SSW, ESE and WNW respectively, but you can specify the exact angle as a value
 of the direction, as in \val{u=}\meta{angle}; if you do, the whole argument must
 be wrapped in braces.
+
+In some games you may find that to exit the room you have to do something
+instead of moving in a given direction. For such cases you can use the
+\docValue{act} key, which takes two arguments: \val{act=}\marg{label}\marg{angle}
 \end{docKey}
+
+\begin{dispExample*}{sidebyside,righthand width=0.333\linewidth}
+\begin{gamemap}
+\graph{
+  "Treetop"
+    [entry,exits={d,act={\S}{90}}]
+};
+\end{gamemap}
+\end{dispExample*}
 
 \begin{docKey}{exits}{=\marg{list of directions}}{no default, initially empty}
 To give more than one exit at once, pass a comma separated list to this option,
@@ -703,7 +713,7 @@ way.
 %    \begin{macrocode}
 \RequirePackage{etoolbox}
 \RequirePackage{tikz}
-\usetikzlibrary{graphs, quotes, shapes.misc, matrix, backgrounds}
+\usetikzlibrary{graphs, quotes, shapes.misc}
 %    \end{macrocode}
 %
 % \subsection{Setting the aspect ratio}
@@ -886,28 +896,34 @@ way.
 %
 %    \begin{macrocode}
 , exit/.is choice
-, exit/e/.style    = {label={[exit node]\tgmE:E}}
-, exit/ne/.style   = {label={[exit node]\tgmNE:\textsc{ne}}}
-, exit/n/.style    = {label={[exit node]\tgmN:N}}
-, exit/nw/.style   = {label={[exit node]\tgmNW:\textsc{nw}}}
-, exit/w/.style    = {label={[exit node]\tgmW:W}}
-, exit/sw/.style   = {label={[exit node]\tgmSW:\textsc{sw}}}
-, exit/s/.style    = {label={[exit node]\tgmS:S}}
-, exit/se/.style   = {label={[exit node]\tgmSE:\textsc{se}}}
+, exit/e/.style  = { label={[exit node]\tgmE:E} }
+, exit/ne/.style = { label={[exit node]\tgmNE:\textsc{ne}} }
+, exit/n/.style  = { label={[exit node]\tgmN:N} }
+, exit/nw/.style = { label={[exit node]\tgmNW:\textsc{nw}} }
+, exit/w/.style  = { label={[exit node]\tgmW:W} }
+, exit/sw/.style = { label={[exit node]\tgmSW:\textsc{sw}} }
+, exit/s/.style  = { label={[exit node]\tgmS:S} }
+, exit/se/.style = { label={[exit node]\tgmSE:\textsc{se}} }
 %    \end{macrocode}
 %
 % For the non-compass directions, the angle has a default that can be overridden
 % by an argument value.
 %
 %    \begin{macrocode}
-, exit/u/.style    = {label={[exit node]#1:U}}
-, exit/u/.default  = {\tgmNNE}
-, exit/d/.style    = {label={[exit node]#1:D}}
-, exit/d/.default  = {\tgmSSW}
-, exit/in/.style   = {label={[exit node]#1:in}}
-, exit/in/.default = {\tgmESE}
-, exit/o/.style    = {label={[exit node]#1:O}}
-, exit/o/.default  = {\tgmWNW}
+, exit/u/.style    = { label={[exit node]#1:U} }
+, exit/u/.default  = { \tgmNNE }
+, exit/d/.style    = { label={[exit node]#1:D} }
+, exit/d/.default  = { \tgmSSW }
+, exit/in/.style   = { label={[exit node]#1:in} }
+, exit/in/.default = { \tgmESE }
+, exit/o/.style    = { label={[exit node]#1:O} }
+, exit/o/.default  = { \tgmWNW }
+%    \end{macrocode}
+%
+% The \val{act} direction allows a custom label.
+%
+%    \begin{macrocode}
+, exit/act/.style 2 args = {label={[exit node]#2:{#1}}}
 %    \end{macrocode}
 % \end{optionkey}
 %
@@ -916,7 +932,7 @@ way.
 % once.
 %
 %    \begin{macrocode}
-, exits/.style     = { exit/.list={#1} }
+, exits/.style = { exit/.list={#1} }
 %    \end{macrocode}
 % \end{optionkey}
 %
@@ -925,7 +941,8 @@ way.
 % \begin{optionkey}{labelin}
 % The \key{labelin} option draws an exit as a node at the very end of an edge.
 % Its value must be drawn from an authority list, and determines both the label
-% text and the angle at which it is drawn. The \val{null} value does nothing.
+% text and the angle at which it is drawn. The \val{act} value allows a custom
+% label to be specified. The \val{null} value does nothing.
 %
 %    \begin{macrocode}
 , labelin/.is choice
@@ -941,6 +958,7 @@ way.
 , labelin/d/.style   = { edge node={node [transit node, pos=1] {D}} }
 , labelin/in/.style  = { edge node={node [transit node, pos=1] {in}} }
 , labelin/o/.style   = { edge node={node [transit node, pos=1] {O}} }
+, labelin/act/.style = { edge node={node [transit node, pos=1] {#1}} }
 , labelin/null/.style = {}
 %    \end{macrocode}
 % \end{optionkey}
@@ -963,6 +981,7 @@ way.
 , labelout/d/.style  = { edge node={node [transit node, pos=0] {D}} }
 , labelout/in/.style = { edge node={node [transit node, pos=0] {in}} }
 , labelout/o/.style  = { edge node={node [transit node, pos=0] {O}} }
+, labelout/act/.style = { edge node={node [transit node, pos=0] {#1}} }
 , labelout/null/.style = {}
 %    \end{macrocode}
 % \end{optionkey}
@@ -1036,6 +1055,10 @@ way.
   , labelout = o
   }
 , startedge/o/.default  = {\tgmWNW}
+, startedge/act/.style 2 args =
+  { out = #2
+  , labelout = {act = #1}
+  }
 %    \end{macrocode}
 %
 % The default value is \val{null}, which prints no label but can establish a
@@ -1117,6 +1140,10 @@ way.
   , labelin = o
   }
 , endedge/o/.default  = {\tgmWNW}
+, endedge/act/.style 2 args =
+  { in = #2
+  , labelin = {act = #1}
+  }
 %    \end{macrocode}
 %
 % The default value is \val{null}, which prints no label but can establish a
