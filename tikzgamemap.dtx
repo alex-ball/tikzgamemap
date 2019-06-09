@@ -700,6 +700,16 @@ way.
 \end{gamemap}
 \end{dispExample*}
 
+\begin{dispExample*}{sidebyside,righthand width=0.25\linewidth}
+\begin{gamemap}
+\graph[no placement]{
+  "Woodland\\Clearing"
+  [exits={n,sw},uturn={W}{180}]
+};
+\end{gamemap}
+\end{dispExample*}
+
+
 \StopEventually{%
  \clearpage
  \PrintChanges
@@ -825,7 +835,7 @@ way.
 % compass points at the same time.
 %
 %    \begin{macrocode}
-, set grid/.code n args = {2}{
+, set grid/.code n args = {2}{%
     \pgfkeys{tikz,x = #1}%
     \pgfkeys{tikz,y = #2}%
     \pgfkeys{tikz,set compass points = {#1}{#2}}%
@@ -1235,6 +1245,34 @@ way.
 %
 %    \begin{macrocode}
 , go/.style n args = {2}{tgmedge, startedge = {#1}, endedge = {#2}}
+%    \end{macrocode}
+% \end{optionkey}
+%
+% \begin{optionkey}{warp}
+% The \key{warp} option is a shortcut option for \key{go} paths which start and
+% end in \key{act} exits.
+%
+%    \begin{macrocode}
+, warp/.code n args = {4}{%
+  \ifstrempty{#1}{%
+    \ifstrempty{#3}{%
+      \pgfkeys{tikz, go={null=#2}{null=#4}}%
+    }{%
+      \pgfkeys{tikz, go={null=#2}{act={#3}{#4}}}}%
+  }{%
+    \ifstrempty{#3}{%
+      \pgfkeys{tikz, go={act={#1}{#2}}{null=#4}}%
+    }{%
+      \pgfkeys{tikz, go={act={#1}{#2}}{act={#3}{#4}}}}}}
+, uturn loop/.pic =
+  {
+    \draw[tgmedge] (0,0) .. controls +(0.5,0.25) and +(0.5,-0.25) .. (0,0);
+  }
+, uturn/.style 2 args =
+  {
+  , label={[label distance = -0.5em - 0.2pt]#2:\tikz{\pic[rotate=#2]{uturn loop};}}
+  , label={[transit node]#2:#1}
+  }
 %    \end{macrocode}
 % \end{optionkey}
 %
